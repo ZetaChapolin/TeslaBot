@@ -452,8 +452,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
                         speak_text("Verificando oportunidade no quadrante")
                         time.sleep(291)
-                        dir = False
-
                         velas = API.get_candles(par, 300, 4, time.time())
 
                         for i, vela in enumerate(velas):
@@ -480,9 +478,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     if selected_option == 'M5-INVERTIDO':
                         display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
                         speak_text("Verificando oportunidade no quadrante")
-                        time.sleep(291)
-                        dir = False
-
+                        time.sleep(591)
                         velas = API.get_candles(par, 300, 5, time.time())
 
                         for i, vela in enumerate(velas):
