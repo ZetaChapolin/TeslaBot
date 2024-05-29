@@ -620,7 +620,7 @@ balance_label.grid(row=8, column=1, padx=10, pady=5, columnspan=2)
 
 tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
 
-options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5"]
+options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "MHI-FILTRADO"]
 option_menu = tk.OptionMenu(root, global_var, *options)
 option_menu.grid(row=8, column=0, sticky="e")
 
