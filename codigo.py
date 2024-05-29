@@ -313,7 +313,11 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     entrar = True if minutos % 15 == 0 else False
                
                 if selected_option == 'M5_INVERTIDO':
-                    entrar = True if minutos % 15 == 0 else False  
+                    entrar = True if minutos % 15 == 0 else False 
+
+                    
+                if selected_option == 'M30':
+                    entrar = True if minutos % 30 == 0 else False  
                         
                 if entrar:
                     
@@ -330,12 +334,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     
                     #=======================================================FLUXO==============================================================
                     if selected_option == 'FLUXO-DE-VELAS':
-                        
-                        
-                        display_message("=============ESTRATEGIA-FLUXO-DE-VELAS=========================================================")
-                        display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        display_message("")
                         velas = API.get_candles(par, 60, 5, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -349,10 +348,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     
                      #=======================================================9:30==============================================================
                     if selected_option == '9:30/EURUSD':
-                        display_message("================9:30/EURUSD=============================================================================")
-                        display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        display_message("")
                         velas = API.get_candles(par, 300, 1, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -366,11 +362,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                      #=============================================ESTRATEGIA QUADRANTE DE 7========================================================
                     if selected_option == 'QUADRANTE DE 7':
-                        display_message("=============ESTRATEGIA-QUADRANTE-DE-7==========================================================")
-                        display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        display_message("===============================================================================================")
-                        display_message("")
                         time.sleep(115)
                         velas = API.get_candles(par, 60, 7, time.time())
                         for i, vela in enumerate(velas):
@@ -383,10 +375,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                     #=============================================ESTRATEGIA TESLA 369========================================================
                     if selected_option == 'TESLA-369':
-                        display_message("=============ESTRATEGIA-TESLA-369==========================================================")
-                        display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        display_message("")
                         time.sleep(115)
                         velas = API.get_candles(par, 60, 6, time.time())
                         for i, vela in enumerate(velas):
@@ -400,10 +389,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                     #=============================================ESTRATEGIA MHI COM FILTRO====================================================
                     if selected_option == 'MHI-FILTRADO':
-                        display_message("=============ESTRATEGIA-MHI-COM-FILTRO=========================================================")
-                        display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        display_message("")
                         velas = API.get_candles(par, 60, 5, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -415,10 +401,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                             
                     #=======================================================3ª = 1ª==============================================================
                     if selected_option == '3ª = 1ª':
-                        display_message("================3ª = 1ª=============================================================================")
-                        display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        display_message("")
                         time.sleep(115)
                         velas = API.get_candles(par, 60, 2, time.time())
                         for i, vela in enumerate(velas):
@@ -434,10 +417,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                    
                     #==========================================ESTRATEGIA REVERSÃO========================================================
                     if selected_option == 'REVERSÃO':
-                        display_message("=============ESTRATEGIA-REVERSÃO==========================================================")
-                        display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        display_message("")
                         velas = API.get_candles(par, 60, 5, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -450,7 +430,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     #==========================================ESTRATEGIA M5========================================================
                     if selected_option == 'M5':
                         display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
-                        speak_text("Verificando oportunidade no quadrante")
                         time.sleep(291)
                         velas = API.get_candles(par, 300, 4, time.time())
 
@@ -466,18 +445,13 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 dir = 'put'
                             if velas[3] == 'r' and cores.count('d') == 0:
                                 dir = 'call'
-                        else:
-                            display_message("QUADRANTE SEM OPORTUNIDADE SEGUINDO :" + datetime.now().strftime("%H:%M:%S"))
-                            speak_text("Quadrante sem oportunidade. seguindo!")
-                            display_message("==========================================================================================")
-                            display_message("")
+                        
                                 
                         #==========================================ESTRATEGIA M5========================================================
 
                     #==========================================ESTRATEGIA M5-INVERTIDO========================================================
                     if selected_option == 'M5-INVERTIDO':
                         display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
-                        speak_text("Verificando oportunidade no quadrante")
                         time.sleep(591)
                         velas = API.get_candles(par, 300, 5, time.time())
 
@@ -493,20 +467,29 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 dir = 'put'
                             if velas[3] == 'r' and velas[4] == 'r' and cores.count('d') == 0:
                                 dir = 'call'
-                        else:
-                            display_message("QUADRANTE SEM OPORTUNIDADE SEGUINDO :" + datetime.now().strftime("%H:%M:%S"))
-                            speak_text("Quadrante sem oportunidade. seguindo!")
-                            display_message("==========================================================================================")
-                            display_message("")
+                        
                                 
-                        #==========================================ESTRATEGIA M5-INVERTIDO========================================================        
-                     
+                        #==========================================ESTRATEGIA M5-INVERTIDO========================================================    
+                        
+                         #=======================================================9:30==============================================================
+                    if selected_option == 'M30':
+                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        velas = API.get_candles(par, 60*30, 2, time.time())
+                        for i, vela in enumerate(velas):
+                            velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
+
+                        cores = ' '.join(velas)
+                        display_message(cores)
+                        if velas[1] == 'g' and cores.count('d') == 0: dir = 'call'
+                        if velas[1] == 'r' and cores.count('d') == 0: dir = 'put'
+
                     if dir:
                         
                         display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
                         display_message("==========================================================================================")
                         display_message("")
                         valor_entrada = valor_entrada_b
+                            
                         for i in range(martingale):
 
                             if selected_option == '9:30/EURUSD' or selected_option == 'M5':
