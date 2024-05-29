@@ -444,7 +444,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         display_message(cores)
                         if preco_atual > media_movel and velas[0] == 'g' and velas[1] == 'r' and velas[2] == 'g' and velas[3] == 'r' and velas[4] == 'g' and cores.count('d') == 0: dir = 'call'
                         if preco_atual < media_movel and velas[0] == 'r' and velas[1] == 'g' and velas[2] == 'r' and velas[3] == 'g' and velas[4] == 'r' and cores.count('d') == 0: dir = 'put' 
-                        time.sleep(1)
+                        
                     #==========================================ESTRATEGIA M5========================================================
                         
                     if selected_option == 'M5':
