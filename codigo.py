@@ -310,9 +310,11 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
 
                 if selected_option == 'M5':
-                    entrar = True if minutos % 5 == 0 else False
+                    entrar = True if minutos % 15 == 0 else False
                
-                    
+                if selected_option == 'M5_INVERTIDO':
+                    entrar = True if minutos % 15 == 0 else False  
+                        
                 if entrar:
                     
     
@@ -446,7 +448,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         if preco_atual < media_movel and velas[0] == 'r' and velas[1] == 'g' and velas[2] == 'r' and velas[3] == 'g' and velas[4] == 'r' and cores.count('d') == 0: dir = 'put' 
                         
                     #==========================================ESTRATEGIA M5========================================================
-                        
                     if selected_option == 'M5':
                         display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
                         speak_text("Verificando oportunidade no quadrante")
@@ -464,24 +465,47 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                         if velas[0] == 'r' and velas[1] == 'r' and velas[2] == 'r' or  velas[0] == 'g' and velas[1] == 'g' and velas[2] == 'g':
                             
-                            
-                            
-                            
                             if velas[3] == 'g' and cores.count('d') == 0:
                                 dir = 'put'
                             if velas[3] == 'r' and cores.count('d') == 0:
                                 dir = 'call'
-                        
-                            display_message("OPERAÇÃO INICIADA AS:" + datetime.now().strftime("%H:%M:%S"))
                         else:
-                            display_message("QUADRANTE SEM OPORTUNIDADE :" + datetime.now().strftime("%H:%M:%S"))
+                            display_message("QUADRANTE SEM OPORTUNIDADE SEGUINDO :" + datetime.now().strftime("%H:%M:%S"))
                             speak_text("Quadrante sem oportunidade. seguindo!")
                             display_message("==========================================================================================")
                             display_message("")
-                       
+                                
                         #==========================================ESTRATEGIA M5========================================================
 
+                    #==========================================ESTRATEGIA M5-INVERTIDO========================================================
+                    if selected_option == 'M5':
+                        display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
+                        speak_text("Verificando oportunidade no quadrante")
+                        time.sleep(291)
+                        dir = False
+
+                        velas = API.get_candles(par, 300, 5, time.time())
+
+                        for i, vela in enumerate(velas):
+                            velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
+
+                        cores = ' '.join(velas)
+                        cores = velas[0] + '1 ' + velas[1] + '2 ' + velas[2] + '3 ' + velas[3] + '4' + velas[4] + '5'
+                        display_message(cores)
+                        
+                        if velas[0] == 'r' and velas[1] == 'r' and velas[2] == 'r' or  velas[0] == 'g' and velas[1] == 'g' and velas[2] == 'g':
                             
+                            if velas[3] == 'g' and velas[4] == 'g' and cores.count('d') == 0:
+                                dir = 'put'
+                            if velas[3] == 'r' and velas[4] == 'r' and cores.count('d') == 0:
+                                dir = 'call'
+                        else:
+                            display_message("QUADRANTE SEM OPORTUNIDADE SEGUINDO :" + datetime.now().strftime("%H:%M:%S"))
+                            speak_text("Quadrante sem oportunidade. seguindo!")
+                            display_message("==========================================================================================")
+                            display_message("")
+                                
+                        #==========================================ESTRATEGIA M5-INVERTIDO========================================================        
                      
                     if dir:
                         
