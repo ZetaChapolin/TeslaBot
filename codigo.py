@@ -278,8 +278,11 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 segundos = agora.second
                 payout = Payout(par)
                 
-                time.sleep(3)
+               
+                display_message("")
                 display_message("TRABALHANDO")
+                display_message("")
+                time.sleep(3)
 
                 if selected_option == '9:30/EURUSD':
                     entrar = True if (hora_atual >= '09:34:57') and hora_atual <= '09:35:06' else False
@@ -316,9 +319,11 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 if selected_option == 'M5_INVERTIDO':
                     entrar = True if minutos % 15 == 0 else False 
 
-                    
                 if selected_option == 'M30':
-                    entrar = True if minutos % 30 == 0 else False  
+                    entrar = True if hora_atual.minute == 0 and hora_atual.hour % 2 == 0 else False
+
+    
+               
                         
                 if entrar:
                     
@@ -492,19 +497,19 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         valor_entrada = valor_entrada_b
                             
                         for i in range(martingale):
-
+                            if selected_option == 'M30':
+                                status, id = API.buy_digital_spot(par, valor_entrada, dir, 30)
+                                    
                             if selected_option == '9:30/EURUSD' or selected_option == 'M5':
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 5)
-                                if dir == 'call':
-                                    speak_text("Operação de compra iniciada")
-                                if dir == 'put':
-                                    speak_text("Operação de venda iniciada")
+                                
                             else:
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 1)
-                                if dir == 'call':
-                                    speak_text("Operação de compra iniciada")
-                                if dir == 'put':
-                                    speak_text("Operação de venda iniciada")
+                                    
+                            if dir == 'call':
+                                speak_text("Operação de compra iniciada")
+                            if dir == 'put':
+                                speak_text("Operação de venda iniciada")
                                     
                             saldo_atual = API.get_balance()
                             balance_label.config(text=f"Saldo: ${saldo_atual:.2f}")
