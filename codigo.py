@@ -317,6 +317,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                     
                 if selected_option == 'M30':
+                    time.sleep(3)
+                    display_message('M30')
                     entrar = True if minutos % 30 == 0 else False  
                         
                 if entrar:
