@@ -471,7 +471,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 
                         #==========================================ESTRATEGIA M5-INVERTIDO========================================================    
                         
-                         #=======================================================9:30==============================================================
+                         #=======================================================M30==============================================================
                     if selected_option == 'M30':
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
                         velas = API.get_candles(par, 60*30, 2, time.time())
@@ -621,7 +621,7 @@ balance_label.grid(row=8, column=1, padx=10, pady=5, columnspan=2)
 
 tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
 
-options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "M5_INVERTIDO"]
+options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "M5_INVERTIDO", "M30"]
 option_menu = tk.OptionMenu(root, global_var, *options)
 option_menu.grid(row=8, column=0, sticky="e")
 
