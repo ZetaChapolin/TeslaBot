@@ -314,7 +314,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     entrar = True if minutos % 15 == 0 else False 
 
                 if selected_option == 'M30-LOSS':
-                    horarios_verificar = ['21:29:50', '23:40:00', '01:29:50', '03:29:50', '05:29:50', '07:29:50', '09:29:50', '11:29:50', '13:29:50', '15:29:50', '17:29:50', '19:29:50']
+                    horarios_verificar = ['21:29:50', '23:45:00', '01:29:50', '03:29:50', '05:29:50', '07:29:50', '09:29:50', '11:29:50', '13:29:50', '15:29:50', '17:29:50', '19:29:50']
                     hora_atual = str(datetime.now().strftime("%H:%M:%S"))
                     entrar = hora_atual in horarios_verificar
 
