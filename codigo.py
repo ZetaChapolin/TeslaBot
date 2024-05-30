@@ -257,7 +257,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     display_message("==========================================================================================")
     speak_text("Tésla iniciado com sucesso. Aguarde e seja paciente, te avisarei quando acontecer alguma operação.")
     display_message("")
-    display_message("TESLA_V_3 INICIADO ÁS :" + datetime.now().strftime("%H:%M:%S"))
+    display_message("TESLA_V_1.0 INICIADO ÁS :" + datetime.now().strftime("%H:%M:%S"))
     display_message("==========================================================================================")
     display_message("")
     
@@ -445,12 +445,10 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         cores = ' '.join(velas)
                         display_message(cores)
                         
-                        if velas[0] == 'r' and velas[1] == 'r' and velas[2] == 'r' or  velas[0] == 'g' and velas[1] == 'g' and velas[2] == 'g':
+                        if velas[0] == 'g' and velas[1] == 'g' and velas[2] == 'g' and velas[3] == 'g' and preco_atual > media_movel: dir = 'put'
+                        if velas[0] == 'r' and velas[1] == 'r' and velas[2] == 'r' and velas[3] == 'r' and preco_atual < media_movel: dir = 'call'
                             
-                            if preco_atual > media_movel and velas[3] == 'g' and cores.count('d') == 0:
-                                dir = 'put'
-                            if preco_atual < media_movel and velas[3] == 'r' and cores.count('d') == 0:
-                                dir = 'call'
+                                
                         
                                 
                         #==========================================ESTRATEGIA M5========================================================
@@ -466,13 +464,10 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                         cores = ' '.join(velas)
                         display_message(cores)
-                        
-                        if velas[0] == 'r' and velas[1] == 'r' and velas[2] == 'r' or  velas[0] == 'g' and velas[1] == 'g' and velas[2] == 'g':
                             
-                            if preco_atual > media_movel and velas[3] == 'g' and velas[4] == 'g' and cores.count('d') == 0:
-                                dir = 'put'
-                            if preco_atual < media_movel and velas[3] == 'r' and velas[4] == 'r' and cores.count('d') == 0:
-                                dir = 'call'
+                        if velas[0] == 'g' and velas[1] == 'g' and velas[2] == 'g' and velas[3] == 'g' and velas[4] == 'g' and preco_atual > media_movel: dir = 'put'
+                        if velas[0] == 'r' and velas[1] == 'r' and velas[2] == 'r' and velas[3] == 'r' and velas[4] == 'r' and preco_atual < media_movel: dir = 'call'
+                        
                         
                                 
                         #==========================================ESTRATEGIA M5-INVERTIDO========================================================    
