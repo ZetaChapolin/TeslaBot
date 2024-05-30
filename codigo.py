@@ -509,7 +509,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                             
                         for i in range(martingale):
                             if selected_option == 'M30' or selected_option == 'M30-LOSS':
-                                status, id = API.buy_digital_spot(par, valor_entrada, dir, 30)
+                                status, id = API.buy_digital_spot(par, valor_entrada, dir, 5*6)
                                     
                             if selected_option == '9:30/EURUSD' or selected_option == 'M5' or selected_option == 'M5-INVERTIDO':
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 5)
