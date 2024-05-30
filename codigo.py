@@ -252,7 +252,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     speak_text("Tésla iniciado com sucesso. Aguarde e seja paciente, te avisarei quando acontecer alguma operação.")
     display_message("==========================================================================================")
     display_message("")
-    display_message("TRABALHANDO... AGUARDE E SEJA PACIENTE!")
+    display_message("TRABALHANDO... AGUARDE E SEJA PACIENTE! V_1")
     display_message("TE AVISAREI QUANDO ACONTECER ALGUMA OPERAÇÃO!")
     display_message("==========================================================================================")
     display_message("")
