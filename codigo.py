@@ -313,13 +313,15 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 if selected_option == 'M5_INVERTIDO':
                     entrar = True if minutos % 15 == 0 else False 
 
-                if selected_option == 'M30':
-
+                if selected_option == 'M30-LOSS':
                     horarios_verificar = ['21:29:50', '23:29:50', '01:29:50', '03:29:50', '05:29:50', '07:29:50', '09:29:50', '11:29:50', '13:29:50', '15:29:50', '17:29:50', '19:29:50']
                     hora_atual = str(datetime.now().strftime("%H:%M:%S"))
                     entrar = hora_atual in horarios_verificar
 
-        
+                if selected_option == 'M30':
+                    horarios_verificar = ['21:00:00', '23:00:00', '01:00:00', '03:00:00', '05:00:00', '07:00:00', '09:00:00', '11:00:00', '13:00:00', '15:00:00', '17:00:00', '19:00:00']
+                    hora_atual = str(datetime.now().strftime("%H:%M:%S"))
+                    entrar = hora_atual in horarios_verificar
 
                     
                 if entrar:
@@ -474,8 +476,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 
                         #==========================================ESTRATEGIA M5-INVERTIDO========================================================    
                         
-                         #=======================================================M30==============================================================
-                    if selected_option == 'M30':
+                         #=======================================================M30-LOSS==============================================================
+                    if selected_option == 'M30-LOSS':
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
                         velas = API.get_candles(par, 60*30, 2, time.time())
                         for i, vela in enumerate(velas):
@@ -486,6 +488,17 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         if velas[0] == 'r' and velas[1] == 'g' and cores.count('d') == 0: dir = 'call'
                         if velas[0] == 'g' and velas[1] == 'r' and cores.count('d') == 0: dir = 'put'
 
+                       #=======================================================M30============================================================== 
+                    if selected_option == 'M30':
+                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        velas = API.get_candles(par, 60*30, 2, time.time())
+                        for i, vela in enumerate(velas):
+                            velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
+
+                        cores = ' '.join(velas)
+                        display_message(cores)
+                        if velas[1] == 'g' and cores.count('d') == 0: dir = 'call'
+                        if velas[1] == 'r' and cores.count('d') == 0: dir = 'put'
                     if dir:
                         
                         display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
@@ -494,7 +507,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         valor_entrada = valor_entrada_b
                             
                         for i in range(martingale):
-                            if selected_option == 'M30':
+                            if selected_option == 'M30' or selected_option == 'M30-LOSS':
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 30)
                                     
                             if selected_option == '9:30/EURUSD' or selected_option == 'M5':
@@ -624,7 +637,7 @@ balance_label.grid(row=8, column=1, padx=10, pady=5, columnspan=2)
 
 tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
 
-options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "M5_INVERTIDO", "M30"]
+options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "M5_INVERTIDO", "M30", "M30-LOSS"]
 option_menu = tk.OptionMenu(root, global_var, *options)
 option_menu.grid(row=8, column=0, sticky="e")
 
