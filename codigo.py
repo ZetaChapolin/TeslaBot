@@ -252,12 +252,12 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     
     display_message("==========================================================================================")
     display_message("")
-    display_message("TRABALHANDO... AGUARDE E SEJA PACIENTE! V_1")
+    display_message("TRABALHANDO... AGUARDE E SEJA PACIENTE!")
     display_message("TE AVISAREI QUANDO ACONTECER ALGUMA OPERAÇÃO!")
     display_message("==========================================================================================")
     speak_text("Tésla iniciado com sucesso. Aguarde e seja paciente, te avisarei quando acontecer alguma operação.")
     display_message("")
-    display_message("TESLA INICIADO ÁS :" + datetime.now().strftime("%H:%M:%S"))
+    display_message("TESLA_V_2 INICIADO ÁS :" + datetime.now().strftime("%H:%M:%S"))
     display_message("==========================================================================================")
     display_message("")
     
@@ -315,15 +315,14 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     entrar = True if minutos % 15 == 0 else False 
 
                 if selected_option == 'M30-LOSS':
-                    entrar = True
-                    #horarios_verificar = ['21:29:50', '23:29:50', '01:29:50', '03:29:50', '05:29:50', '07:29:50', '09:29:50', '11:29:50', '13:29:50', '15:29:50', '17:29:50', '19:29:50']
-                    #hora_atual = str(datetime.now().strftime("%H:%M:%S"))
-                    #entrar = hora_atual in horarios_verificar
+                    horarios_verificar = ['21:25:00', '23:25:00', '01:25:00', '03:25:00', '05:25:00', '07:25:00', '09:25:00', '11:25:00', '13:25:00', '15:25:00', '17:25:00', '19:25:00']
+                    hora_atual = str(datetime.now().strftime("%H:%M:%S"))
+                    entrar = hora_atual in horarios_verificar
 
                 if selected_option == 'M30':
-                    horarios_verificar = ['21:00:00', '23:00:00', '01:00:00', '03:00:00', '05:00:00', '07:00:00', '09:00:00', '11:00:00', '13:00:00', '15:00:00', '17:00:00', '19:00:00']
+                    horarios_verificar = ['20:59:00', '22:55:00', '00:55:00', '02:55:00', '04:55:00', '06:55:00', '08:55:00', '10:55:00', '12:55:00', '14:55:00', '16:55:00', '18:55:00']
                     hora_atual = str(datetime.now().strftime("%H:%M:%S"))
-                    entrar = True #hora_atual in horarios_verificar
+                    entrar = hora_atual in horarios_verificar
 
                     
                 if entrar:
@@ -487,8 +486,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                         cores = ' '.join(velas)
                         display_message(cores)
-                        if velas[0] == 'r' and velas[1] == 'g': dir = 'put'
-                        if velas[0] == 'g' and velas[1] == 'r': dir = 'call'
+                        if velas[0] == 'r' and velas[1] == 'g': speak_text("Prepare-se para fazer uma venda daqui 5 minutos")
+                        if velas[0] == 'g' and velas[1] == 'r': speak_text("Prepare-se para fazer uma compra daqui 5 minutos")
 
                        #=======================================================M30============================================================== 
                     if selected_option == 'M30':
@@ -499,8 +498,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                         cores = ' '.join(velas)
                         display_message(cores)
-                        if velas[1] == 'g': dir = 'call'
-                        if velas[1] == 'r': dir = 'put'
+                        if velas[1] == 'g': speak_text("Prepare-se para fazer uma compra daqui 5 minutos")
+                        if velas[1] == 'r': speak_text("Prepare-se para fazer uma venda daqui 5 minutos")
                     if dir:
                         
                         display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
@@ -509,8 +508,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         valor_entrada = valor_entrada_b
                             
                         for i in range(martingale):
-                            if selected_option == 'M30' or selected_option == 'M30-LOSS':
-                                status, id = API.buy_digital_spot(par, valor_entrada, dir, 5*6)
                                     
                             if selected_option == '9:30/EURUSD' or selected_option == 'M5' or selected_option == 'M5-INVERTIDO':
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 5)
