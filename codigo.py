@@ -320,8 +320,13 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     entrar = True if minutos % 15 == 0 else False 
 
                 if selected_option == 'M30':
+                    horarios_desejados = [21, 23, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
                     hora_atual = datetime.datetime.now().hour
-                    entrar = True if hora_atual % 2 == 0 and minutos == 0 and segundos == 0 else False
+                    entrar = True if hora_atual in horarios_desejados and minutos == 0 and segundos == 0 else False
+
+    
+
+                    
                 if entrar:
                     
     
