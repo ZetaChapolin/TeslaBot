@@ -278,12 +278,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 segundos = agora.second
                 payout = Payout(par)
                 
-               
-                display_message("")
-                display_message(f'TRABALHANDO: {par} às {datetime.now().strftime("%H:%M:%S")}')
-                display_message("")
-                time.sleep(3)
-
                 if selected_option == '9:30/EURUSD':
                     entrar = True if (hora_atual >= '09:34:57') and hora_atual <= '09:35:06' else False
                     par = 'EURUSD'
