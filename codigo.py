@@ -310,7 +310,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 if selected_option == 'M5':
                     entrar = True if minutos % 15 == 0 else False
                
-                if selected_option == 'M5_INVERTIDO':
+                if selected_option == 'M5-INVERTIDO':
                     entrar = True if minutos % 15 == 0 else False 
 
                 if selected_option == 'M30-LOSS':
@@ -510,10 +510,10 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                             if selected_option == 'M30' or selected_option == 'M30-LOSS':
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 30)
                                     
-                            if selected_option == '9:30/EURUSD' or selected_option == 'M5':
+                            if selected_option == '9:30/EURUSD' or selected_option == 'M5' or selected_option == 'M5-INVERTIDO':
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 5)
-                                
-                            else:
+                                    
+                            if selected_option == 'TESLA-369' or selected_option == '3ª = 1ª' or selected_option == 'QUADRANTE DE 7' or selected_option == 'FLUXO-DE-VELAS' or selected_option == 'REVERSÃO':
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 1)
                                     
                             if dir == 'call':
@@ -637,7 +637,7 @@ balance_label.grid(row=8, column=1, padx=10, pady=5, columnspan=2)
 
 tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
 
-options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "M5_INVERTIDO", "M30", "M30-LOSS"]
+options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "M5-INVERTIDO", "M30", "M30-LOSS"]
 option_menu = tk.OptionMenu(root, global_var, *options)
 option_menu.grid(row=8, column=0, sticky="e")
 
