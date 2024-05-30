@@ -249,12 +249,13 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     #display_message("")
     #display_message("PARES EM QUE VOU OPERAR: " + ', '.join(pares_digitais_abertos))
     
-    speak_text("Tésla iniciado com sucesso. Aguarde e seja paciente, te avisarei quando acontecer alguma operação.")
+    
     display_message("==========================================================================================")
     display_message("")
     display_message("TRABALHANDO... AGUARDE E SEJA PACIENTE! V_1")
     display_message("TE AVISAREI QUANDO ACONTECER ALGUMA OPERAÇÃO!")
     display_message("==========================================================================================")
+    speak_text("Tésla iniciado com sucesso. Aguarde e seja paciente, te avisarei quando acontecer alguma operação.")
     display_message("")
     display_message("TESLA INICIADO ÁS :" + datetime.now().strftime("%H:%M:%S"))
     display_message("==========================================================================================")
