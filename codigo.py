@@ -280,7 +280,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 
                
                 display_message("")
-                display_message('TRABALHANDO: ' + str(par) + ' às ' + agora)
+                display_message(f'TRABALHANDO: {par} às {datetime.now().strftime("%H:%M:%S")}')
                 display_message("")
                 time.sleep(3)
 
@@ -320,12 +320,12 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     entrar = True if minutos % 15 == 0 else False 
 
                 if selected_option == 'M30':
-                    hora_atual = str(datetime.datetime.now().strftime("%H:%M:%S"))
-                    entrar = True if hora_atual in ['21:29:50', '23:29:50', '01:29:50', '03:29:50', '05:29:50', '07:29:50', '09:29:50', '11:29:50', '13:29:50', '15:29:50', '17:29:50', '19:29:50'] else False
 
-                
+                    horarios_verificar = ['21:29:50', '23:29:50', '01:29:50', '03:29:50', '05:29:50', '07:29:50', '09:29:50', '11:29:50', '13:29:50', '15:29:50', '17:29:50', '19:29:50']
+                    hora_atual = str(datetime.now().strftime("%H:%M:%S"))
+                    entrar = hora_atual in horarios_verificar
 
-    
+        
 
                     
                 if entrar:
