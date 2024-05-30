@@ -322,7 +322,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 if selected_option == 'M30':
                     horarios_verificar = ['21:00:00', '23:00:00', '01:00:00', '03:00:00', '05:00:00', '07:00:00', '09:00:00', '11:00:00', '13:00:00', '15:00:00', '17:00:00', '19:00:00']
                     hora_atual = str(datetime.now().strftime("%H:%M:%S"))
-                    entrar = hora_atual in horarios_verificar
+                    entrar = True #hora_atual in horarios_verificar
 
                     
                 if entrar:
