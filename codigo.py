@@ -280,7 +280,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 
                
                 display_message("")
-                display_message("TRABALHANDO")
+                display_message('TRABALHANDO: ' + ' às ' + datetime.now().strftime("%H:%M:%S"))
                 display_message("")
                 time.sleep(3)
 
@@ -320,7 +320,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     entrar = True if minutos % 15 == 0 else False 
 
                 if selected_option == 'M30':
-                    entrar = True if minutos == 0 and hora_atual % 2 == 0 else False
+                    entrar = True if hora_atual % 2 == 0 and minutos == 0 and segundos == 0 else False
+
 
     
                
@@ -480,14 +481,15 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                          #=======================================================M30==============================================================
                     if selected_option == 'M30':
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        time.sleep(1790)
                         velas = API.get_candles(par, 60*30, 2, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
 
                         cores = ' '.join(velas)
                         display_message(cores)
-                        if velas[1] == 'g' and cores.count('d') == 0: dir = 'call'
-                        if velas[1] == 'r' and cores.count('d') == 0: dir = 'put'
+                        if velas[0] == 'r' and velas[1] == 'g' and cores.count('d') == 0: dir = 'call'
+                        if velas[0] == 'g' and velas[1] == 'r' and cores.count('d') == 0: dir = 'put'
 
                     if dir:
                         
