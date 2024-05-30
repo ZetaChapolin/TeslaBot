@@ -485,8 +485,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                         cores = ' '.join(velas)
                         display_message(cores)
-                        if velas[0] == 'r' and velas[1] == 'g': dir = 'call'
-                        if velas[0] == 'g' and velas[1] == 'r': dir = 'put'
+                        if velas[0] == 'r' and velas[1] == 'g': dir = 'put'
+                        if velas[0] == 'g' and velas[1] == 'r': dir = 'call'
 
                        #=======================================================M30============================================================== 
                     if selected_option == 'M30':
