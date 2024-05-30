@@ -483,7 +483,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                          #=======================================================M30==============================================================
                     if selected_option == 'M30':
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        time.sleep(1790)
                         velas = API.get_candles(par, 60*30, 2, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
