@@ -253,8 +253,9 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         signal = "COMPRA" if prediction[0] == 1 else "VENDA"
                         confidence = accuracy * 100
                         display_message('ANALISANDO CONFIANÇA AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
-                        display_message("SINAL DE ENTRADA: {}\n".format(signal))
                         display_message("CONFIANCA: {:.2f}%\n".format(confidence))
+                        display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                        
                         if confidence >= 51 and confidence <= 75:
                             if signal == "COMPRA":
                                 if preco_atual > media_movel and diferenca < limite_compra:
