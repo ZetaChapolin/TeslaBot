@@ -253,7 +253,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
                         signal = "COMPRA" if prediction[0] == 1 else "VENDA"
                         confidence = accuracy * 100
-                        display_message('ANALISANDO CONFIANÇA AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
                         display_message("CONFIANCA: {:.2f}%\n".format(confidence))
                         display_message("SINAL DE ENTRADA: {}\n".format(signal))
                         
