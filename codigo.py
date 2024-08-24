@@ -334,7 +334,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
             time.sleep(3)
 
 root = tk.Tk()
-root.title("TESLA 369 BOT BETA - EJS ENTERPRISE")
+root.title("TESLA 369 BOT BETA 1.0 - EJS ENTERPRISE")
 root.geometry("400x600")
 checkbox_var = tk.BooleanVar()
 
