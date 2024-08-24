@@ -137,7 +137,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         API.unsubscribe_strike_list(par, 1)
 
         return d
-    def IA():
+    def IA(signal):
         diferenca = preco_atual - media_movel
         limite_compra = 0.30
         limite_venda = -0.30
@@ -269,6 +269,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 minutos = agora.minute
                 segundos = agora.second
                 payout = Payout(par)
+                signal = IA(signal)
                 
               
 
