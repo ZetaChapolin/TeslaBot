@@ -18,7 +18,6 @@ def display_message(*args):
     def update_listbox():
         listbox.insert(tk.END, message)
         listbox.yview(tk.END)
-
     root.after(0, update_listbox)
 
 def load_credentials():
@@ -75,7 +74,7 @@ def iniciar_script():
         display_message("VOCÊ SELECIONOU: " + selected_option)
         display_message("CASO QUEIRA TROCAR, APENAS SELECIONE OUTRA.")
         display_message("")
-
+      
         global thread_started
         if not thread_started:
             thread_started = True
@@ -102,7 +101,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     def Martingale(valor, payout):
         lucro_esperado = valor * payout
         perca = float(valor)
-
         while True:
             if round(valor * payout, 2) > round(abs(perca) + lucro_esperado, 2):
                 return round(valor, 2)
@@ -118,7 +116,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 break
             time.sleep(1)
         API.unsubscribe_strike_list(par, 1)
-
         return d
 
     display_message("== EJS ENTERPRISE ==")
@@ -134,10 +131,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     
     valor_entrada = entry_value
     valor_entrada_b = float(valor_entrada)
-
     martingale = gales
     martingale += 1
-
     stop_loss = stop_loss
     stop_gain = stop_gain
     palavra_chave = email
@@ -158,7 +153,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         sys.exit()
 
     if palavra_chave in conteudo:
-       display_message("TESLA LIBERADO PARA : "+ palavra_chave)
+        display_message("TESLA LIBERADO PARA : "+ palavra_chave)
     else:
         display_message("==========================================================================================")
         display_message("")
@@ -205,17 +200,14 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 minutos = agora.minute
                 segundos = agora.second
                 payout = Payout(par)
-
                 if selected_option == '3ª = 1ª':
                     entrar = True if minutos % 5 == 0 else False
                 if entrar:
                     dir = False
                     status = False
-
                     candles = API.get_candles(par, 60, 22, time.time())
                     preco_atual = candles[-1]['close']
                     media_movel = sum(candle['close'] for candle in candles[:-1]) / 21
-
                     if selected_option == '3ª = 1ª':
                         display_message("================3ª = 1ª=============================================================================")
                         display_message("")
@@ -224,124 +216,94 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         time.sleep(55)
                         velas = API.get_candles(par, 60, 1, time.time())
                         velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
-                        
                         cores = velas[0]
-                        
                         display_message(cores)
-                        
                         if preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0: dir = 'call'
                         if preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0: dir = 'put'
-
                     if dir:
-                        display_message('OPERAÇÃO EM :', par, dir, 'VALOR:', valor_entrada, 'DURAÇÃO 30 MINUTOS')
-                        status, id = API.buy_digital_spot(par, valor_entrada, dir, 30)
-
-                        if status:
-                            while True:
-                                try:
-                                    status, valor = API.check_win_digital_v2(id)
-                                except:
-                                    status = True
-                                    valor = 0
-                                
-                                if status:
-                                    valor = valor if valor > 0 else float('-' + str(abs(valor_entrada)))
-                                    lucro += round(valor, 2)
-                                    
-                                    display_message('RESULTADO DA OPERAÇÃO: ')
-                                    display_message('WIN ' if valor > 0 else 'LOSS ', round(valor, 2), '/ lucro:', round(lucro, 2), ('/ ' + str(i) + ' GALE' if i > 0 else ''))
-                                    valor_entrada = Martingale(valor_entrada, payout)
-                                    stop(lucro, stop_gain, stop_loss)
-                                    saldo_atual = API.get_balance()
-                                    balance_label.config(text=f"Saldo: ${saldo_atual:.2f}")
-                                    operacoes += 1
-                                    display_message("")
-                                    display_message("==========================================================================================")
-                                    display_message("")
-                                    display_message('TRABALHANDO...')
-                                    
-                                    break
-
-                time.sleep(1)
-
-        except KeyboardInterrupt:
-            display_message("Interrompido pelo usuário.")
-            sys.exit()
+                                                display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
+                        display_message('VALOR DA OPERAÇÃO: $' + str(valor_entrada))
+                        API.buy(valor_entrada, par, dir, 1)
+                        operacoes += 1
+                        time.sleep(1)
+                        while True:
+                            status, _, _ = API.check_win_v3(operacoes)
+                            if status:
+                                lucro += API.get_win_amount(operacoes)
+                                display_message('OPERAÇÃO FINALIZADA COM SUCESSO!')
+                                display_message('VALOR DA OPERAÇÃO: $' + str(valor_entrada))
+                                display_message('GANHO/LOSS: $' + str(API.get_win_amount(operacoes)))
+                                break
+                            elif status is False:
+                                display_message('OPERAÇÃO FINALIZADA COM PERDA!')
+                                display_message('VALOR DA OPERAÇÃO: $' + str(valor_entrada))
+                                display_message('LOSS: $' + str(API.get_win_amount(operacoes)))
+                                break
+                            time.sleep(1)
+                        valor_entrada = Martingale(valor_entrada, payout)
+                        display_message('VALOR DE ENTRADA ATUALIZADO: $' + str(valor_entrada))
+                        stop(lucro, stop_gain, stop_loss)
+                time.sleep(30)
         except Exception as e:
-            display_message(f"Erro: {e}")
-            time.sleep(5)
+            display_message('OCORREU UM ERRO: ' + str(e))
+            time.sleep(10)
+
+def parar_script():
+    global thread_started
+    if thread_started:
+        thread_started = False
+        display_message("ROBO PARADO. FINALIZANDO...")
+        time.sleep(5)
+        sys.exit()
 
 root = tk.Tk()
-root.title("TESLA 369 BOT - EJS ENTERPRISE")
-root.geometry("400x600")
-checkbox_var = tk.BooleanVar()
+root.title("Tesla 369 - Bot de Trading")
 
-root.columnconfigure(0, weight=1)
-root.columnconfigure(1, weight=1)
-root.rowconfigure(9, weight=1)
-
-root.configure(bg="white")
-
+tk.Label(root, text="Email:").grid(row=0, column=0)
 email_var = tk.StringVar()
+tk.Entry(root, textvariable=email_var).grid(row=0, column=1)
+
+tk.Label(root, text="Senha:").grid(row=1, column=0)
 password_var = tk.StringVar()
+tk.Entry(root, textvariable=password_var, show="*").grid(row=1, column=1)
+
+tk.Label(root, text="Conta:").grid(row=2, column=0)
 account_var = tk.StringVar()
+tk.Entry(root, textvariable=account_var).grid(row=2, column=1)
+
+tk.Label(root, text="Par:").grid(row=3, column=0)
 par_var = tk.StringVar()
+tk.Entry(root, textvariable=par_var).grid(row=3, column=1)
+
+tk.Label(root, text="Valor de Entrada:").grid(row=4, column=0)
 entry_value_var = tk.StringVar()
+tk.Entry(root, textvariable=entry_value_var).grid(row=4, column=1)
+
+tk.Label(root, text="Gales:").grid(row=5, column=0)
 gales_var = tk.StringVar()
+tk.Entry(root, textvariable=gales_var).grid(row=5, column=1)
+
+tk.Label(root, text="Stop Loss:").grid(row=6, column=0)
 stop_loss_var = tk.StringVar()
+tk.Entry(root, textvariable=stop_loss_var).grid(row=6, column=1)
+
+tk.Label(root, text="Stop Gain:").grid(row=7, column=0)
 stop_gain_var = tk.StringVar()
+tk.Entry(root, textvariable=stop_gain_var).grid(row=7, column=1)
+
+tk.Button(root, text="Iniciar Script", command=iniciar_script).grid(row=8, column=0, columnspan=2)
+tk.Button(root, text="Parar Script", command=parar_script).grid(row=9, column=0, columnspan=2)
+
+listbox = tk.Listbox(root, height=15, width=50)
+listbox.grid(row=10, column=0, columnspan=2)
+
+balance_label = tk.Label(root, text="Saldo: $0.00")
+balance_label.grid(row=11, column=0, columnspan=2)
+
 global_var = tk.StringVar()
+tk.Radiobutton(root, text="3ª = 1ª", variable=global_var, value='3ª = 1ª').grid(row=12, column=0, columnspan=2)
 
 load_credentials()
 
-scrollbar = tk.Scrollbar(root)
-scrollbar.grid(row=9, column=1, sticky='nsew')
-
-listbox = tk.Listbox(root, yscrollcommand=scrollbar.set, width=50, height=10, bg="black", fg="yellow")
-listbox.grid(row=9, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
-
-scrollbar.config(command=listbox.yview)
-
-tk.Label(root, text="E-mail:").grid(row=0, column=0, sticky="e")
-tk.Entry(root, textvariable=email_var).grid(row=0, column=1)
-
-tk.Label(root, text="Senha:").grid(row=1, column=0, sticky="e")
-tk.Entry(root, textvariable=password_var, show="*").grid(row=1, column=1)
-
-tk.Label(root, text="Conta (REAL/PRACTICE):").grid(row=2, column=0, sticky="e")
-tk.Entry(root, textvariable=account_var).grid(row=2, column=1)
-
-tk.Label(root, text="Par (EURUSD/EURUSD-OTC):").grid(row=3, column=0, sticky="e")
-tk.Entry(root, textvariable=par_var).grid(row=3, column=1)
-
-tk.Label(root, text="Valor de entrada:").grid(row=4, column=0, sticky="e")
-tk.Entry(root, textvariable=entry_value_var).grid(row=4, column=1)
-
-tk.Label(root, text="Gales:").grid(row=5, column=0, sticky="e")
-tk.Entry(root, textvariable=gales_var).grid(row=5, column=1)
-
-tk.Label(root, text="Stop Loss:").grid(row=6, column=0, sticky="e")
-tk.Entry(root, textvariable=stop_loss_var).grid(row=6, column=1)
-
-tk.Label(root, text="Stop Gain:").grid(row=7, column=0, sticky="e")
-tk.Entry(root, textvariable=stop_gain_var).grid(row=7, column=1)
-
-balance_label = tk.Label(root, text="Saldo: $0.00")
-balance_label.grid(row=8, column=1, padx=10, pady=5, columnspan=2)
-
-
-tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
-
-options = ["TESLA-369", "MHI-FILTRADO", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5"]
-option_menu = tk.OptionMenu(root, global_var, *options)
-option_menu.grid(row=8, column=0, sticky="e")
-
-start_button = tk.Button(root, text="Iniciar", command=iniciar_script)
-start_button.grid(row=8, column=1, sticky="w")
-
-def on_closing():
-    save_credentials()
-    root.destroy()
-
-root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
+
