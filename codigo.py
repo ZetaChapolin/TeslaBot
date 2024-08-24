@@ -214,7 +214,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
             
     else:
         display_message("ERRO AO CONECTAR")
-        speak_text("ERRO AO CONECTAR. por favor verifique se se a senha ou email esta correto e se naão tem nenhum espaço entre eles")
         time.sleep(5)
         sys.exit()
       
@@ -246,9 +245,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         try:
             
             while True:
-                
-                
-                #for par in pares_digitais_abertos:
                 selected_option = global_var.get()
                 hora_atual = datetime.now().strftime('%H:%M:%S')
                 agora = datetime.now()
