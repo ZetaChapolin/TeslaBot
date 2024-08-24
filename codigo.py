@@ -141,7 +141,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
 
 
-    def IA(signal):
+    def IA():
         
         diferenca = preco_atual - media_movel
         limite_compra = 0.30
@@ -293,7 +293,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 minutos = agora.minute
                 segundos = agora.second
                 payout = Payout(par)
-                signal = IA(signal)
+                
 
                 
               
@@ -353,8 +353,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         velas = API.get_candles(par, 60, 1, time.time())
                         velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
                         cores = velas[0]
-                        signal = ""  # Inicializa signal
-                        IA(signal)
+                        
+                        IA()
                         if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0:
                             dir = 'call'
                         if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0:
