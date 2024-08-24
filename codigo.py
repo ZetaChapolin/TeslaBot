@@ -257,37 +257,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
 
 
-                    ####################################################################################################################################################################################
-                    diferenca = preco_atual - media_movel
-                    limite_compra = 0.30
-                    limite_venda = -0.30
-                    candles = API.get_candles(par, 60, 200, time.time())
-                    if candles is None:
-                        display_message("___Erro ao obter os dados do par.\n")
-                        return
-                    X = np.array([candle["close"] for candle in candles])
-                    y = np.array([1 if candle["close"] > candle["open"] else 0 for candle in candles])
-                    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-                    model = RandomForestClassifier(n_estimators=100, random_state=42)
-                    model.fit(X_train.reshape(-1, 1), y_train)
-                    accuracy = model.score(X_test.reshape(-1, 1), y_test)
-                    new_data = np.array([X[-1]])
-                    prediction = model.predict(new_data.reshape(-1, 1))
-                    confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
-                    signal = "COMPRA" if prediction[0] == 1 else "VENDA"
-                    confidence = accuracy * 100
-                    display_message('___ANALISANDO CONFIANÇA AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
-                    if confidence >= 51 and confidence <= 75:
-                        if signal == "COMPRA":
-                            if preco_atual > media_movel and diferenca < limite_compra:
-                                display_message("___SINAL DE ENTRADA: {}\n".format(signal))
-                                display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-                        if signal == "VENDA":
-                            if preco_atual < media_movel and diferenca > limite_venda:
-                                display_message("___SINAL DE ENTRADA: {}\n".format(signal))
-                                display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-                   ####################################################################################################################################################################################
-                   
+                    
 
                         #=======================================================3ª = 1ª==============================================================
                         if selected_option == '3ª = 1ª':
@@ -296,6 +266,37 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                             display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
                             display_message("")
                             time.sleep(118)
+                            ####################################################################################################################################################################################
+                            diferenca = preco_atual - media_movel
+                            limite_compra = 0.30
+                            limite_venda = -0.30
+                            candles = API.get_candles(par, 60, 200, time.time())
+                            if candles is None:
+                                display_message("___Erro ao obter os dados do par.\n")
+                                return
+                            X = np.array([candle["close"] for candle in candles])
+                            y = np.array([1 if candle["close"] > candle["open"] else 0 for candle in candles])
+                            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+                            model = RandomForestClassifier(n_estimators=100, random_state=42)
+                            model.fit(X_train.reshape(-1, 1), y_train)
+                            accuracy = model.score(X_test.reshape(-1, 1), y_test)
+                            new_data = np.array([X[-1]])
+                            prediction = model.predict(new_data.reshape(-1, 1))
+                            confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
+                            signal = "COMPRA" if prediction[0] == 1 else "VENDA"
+                            confidence = accuracy * 100
+                            display_message('___ANALISANDO CONFIANÇA AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
+                            if confidence >= 51 and confidence <= 75:
+                                if signal == "COMPRA":
+                                    if preco_atual > media_movel and diferenca < limite_compra:
+                                        display_message("___SINAL DE ENTRADA: {}\n".format(signal))
+                                        display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
+                                if signal == "VENDA":
+                                    if preco_atual < media_movel and diferenca > limite_venda:
+                                        display_message("___SINAL DE ENTRADA: {}\n".format(signal))
+                                        display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
+                   ####################################################################################################################################################################################
+                   
                             velas = API.get_candles(par, 60, 1, time.time())
                             velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
                             
