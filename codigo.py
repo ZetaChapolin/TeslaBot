@@ -114,8 +114,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
             display_message("STOP GAIN AS:" + datetime.now().strftime("%H:%M:%S") + " VOCÊ GANHOU: " + str(lucro) + "$")
             sys.exit()
    
-   
-
     def Martingale(valor, payout):
         lucro_esperado = valor * payout
         perca = float(valor)
@@ -138,22 +136,16 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
         return d
 
-
-
-
-    def IA(signal):
-        
+    def IA():
+        nonlocal preco_atual, media_movel
         diferenca = preco_atual - media_movel
         limite_compra = 0.30
         limite_venda = -0.30
         candles = API.get_candles(par, 60, 200, time.time())
-                    
-
-
 
         if candles is None:
             display_message("___Erro ao obter os dados do par.\n")
-            return
+            return None
 
         X = np.array([candle["close"] for candle in candles])
         y = np.array([1 if candle["close"] > candle["open"] else 0 for candle in candles])
@@ -179,23 +171,16 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
             time.sleep(50)
                     
         if confidence >= 51 and confidence <= 75:
-                        
             if signal == "COMPRA":
-                            
                 if preco_atual > media_movel and diferenca < limite_compra:
                     display_message("___SINAL DE ENTRADA: {}\n".format(signal))
                     display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-
             if signal == "VENDA":
-                            
                 if preco_atual < media_movel and diferenca > limite_venda:
                     display_message("___SINAL DE ENTRADA: {}\n".format(signal))
                     display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-        
-
         return signal
 
-    
     display_message("== EJS ENTERPRISE ==")
     display_message("== TESLA 369 - BOT ==")
     display_message("== O PODER DOS NUMEROS ==")
@@ -254,18 +239,14 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     saldo_atual = API.get_balance()
     balance_label.config(text=f"Saldo: ${saldo_atual:.2f}")
 
-
     if API.check_connect():
         display_message("CONECTADO COM SUCESSO!")
-    
-     
     else:
         display_message("ERRO AO CONECTAR")
         speak_text("ERRO AO CONECTAR. por favor verifique se se a senha ou email esta correto e se naão tem nenhum espaço entre eles")
         time.sleep(5)
         sys.exit()
       
-  
     lucro = 0
     global operacoes
     operacoes = 0
@@ -279,21 +260,16 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     display_message("==========================================================================================")
     display_message("")
     
-
     while True:
-        
         try:
-            
             while True:
-                
-                
                 selected_option = global_var.get()
                 hora_atual = datetime.now().strftime('%H:%M:%S')
                 agora = datetime.now()
                 minutos = agora.minute
                 segundos = agora.second
                 payout = Payout(par)
-                signal = IA(signal)
+                signal = IA() 
 
                 
               
