@@ -248,7 +248,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                 
                 if selected_option == '3ª = 1ª':
-                    entrar = True if minutos % 5 == 0 else False
+                    entrar = True #if minutos % 5 == 0 else False
 
 
               
@@ -330,7 +330,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                             display_message("")
                             display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
                             display_message("")
-                            time.sleep(118)
+                            #time.sleep(118)
                             velas = API.get_candles(par, 60, 1, time.time())
                             velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
                             
