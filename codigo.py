@@ -233,9 +233,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         display_message("================3ª = 1ª=============================================================================")
                         display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        display_message("")
-                        time.sleep(118)
-                        ####################################################################################################################################################################################
+                        time.sleep(117)
+                        ####################################################################IA#######################################################################################################
                         diferenca = preco_atual - media_movel
                         limite_compra = 0.30
                         limite_venda = -0.30
@@ -267,7 +266,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 if preco_atual < media_movel and diferenca > limite_venda:
                                     display_message("SINAL DE ENTRADA: {}\n".format(signal))
                                     display_message("CONFIANCA: {:.2f}%\n".format(confidence))
-                        ####################################################################################################################################################################################
+                        ##########################################################################IA##################################################################################################
                     
                             velas = API.get_candles(par, 60, 1, time.time())
                             velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
