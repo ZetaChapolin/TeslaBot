@@ -220,6 +220,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     entrar = True if minutos % 5 == 0 else False
 
                 if entrar:
+                    dir = None  # Inicialize com um valor padrão
                     
 
                     candles = API.get_candles(par, 60, 22, time.time())
@@ -228,8 +229,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                     #=======================================================3ª = 1ª==============================================================
                     if selected_option == '3ª = 1ª':
-                        dir = False
-                        status = False
+                       
                         display_message("================3ª = 1ª=============================================================================")
                         display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
