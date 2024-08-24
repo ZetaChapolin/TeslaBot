@@ -193,6 +193,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
       
     lucro = 0
     global operacoes
+    dir = False
+    status = False
     
     display_message("==========================================================================================")
     display_message("")
