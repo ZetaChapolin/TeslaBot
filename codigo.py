@@ -236,8 +236,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         time.sleep(117)
                         ####################################################################IA#######################################################################################################
                         diferenca = preco_atual - media_movel
-                        limite_compra = 0.30
-                        limite_venda = -0.30
+                        
                         candles = API.get_candles(par, 60, 200, time.time())
                         if candles is None:
                             display_message("___Erro ao obter os dados do par.\n")
@@ -257,26 +256,26 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         display_message("SINAL DE ENTRADA: {}\n".format(signal))
                         
                         if confidence >= 51 and confidence <= 75:
-                            if signal == "COMPRA":
-                                if preco_atual > media_movel and diferenca < limite_compra:
-                                    display_message("SINAL DE ENTRADA: {}\n".format(signal))
-                                    display_message("CONFIANCA: {:.2f}%\n".format(confidence))
-                            if signal == "VENDA":
-                                if preco_atual < media_movel and diferenca > limite_venda:
-                                    display_message("SINAL DE ENTRADA: {}\n".format(signal))
-                                    display_message("CONFIANCA: {:.2f}%\n".format(confidence))
-                        ##########################################################################IA##################################################################################################
-                    
                             velas = API.get_candles(par, 60, 1, time.time())
                             velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
-                        
                             cores = velas[0]
                             display_message(cores)
-                        
-                            if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0:
-                                dir = 'call'
-                            if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0:
-                                dir = 'put'
+                            if signal == "COMPRA":
+                                if preco_atual > media_movel:
+                                    display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                                    display_message("CONFIANCA: {:.2f}%\n".format(confidence))
+                                    if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0:
+                                        dir = 'call'
+                                    
+                            if signal == "VENDA":
+                                if preco_atual < media_movel:
+                                    display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                                    display_message("CONFIANCA: {:.2f}%\n".format(confidence))
+                                    if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0:
+                                        dir = 'put'
+                        ##########################################################################IA##################################################################################################
+                    
+                           
 
                     #=======================================================3ª = 1ª==============================================================
                     
