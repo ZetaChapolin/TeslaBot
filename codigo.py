@@ -1,10 +1,6 @@
-##########################################################################################
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-##########################################################################################
-
-
 import tkinter as tk
 from tkinter import messagebox
 import threading
@@ -15,19 +11,19 @@ from datetime import datetime
 import time
 import sys
 import requests
+
 url = "https://github.com/Tesla-369-bot/Aprovados/blob/main/Aprovados.md"
 thread_started = False
 operacoes = 0
 
-    
 def display_message(*args):
     message = " ".join(map(str, args))
+    
     def update_listbox():
         listbox.insert(tk.END, message)
         listbox.yview(tk.END)
 
     root.after(0, update_listbox)
-
 
 def load_credentials():
     try:
@@ -57,8 +53,8 @@ def save_credentials():
     }
     with open('credentials.json', 'w') as file:
         json.dump(data, file)
+
 def minha_funcao():
-    
     email = email_var.get()
     password = password_var.get()
     account = account_var.get()
@@ -67,40 +63,36 @@ def minha_funcao():
     gales = int(gales_var.get())
     stop_loss = float(stop_loss_var.get())
     stop_gain = float(stop_gain_var.get())
+
     if not email or not password:
         messagebox.showerror("Erro", "POR FAVOR, PREENCHE O EMAIL E A SENHA")
         return
+    
     threading.Thread(target=run_script, args=(email, password, account, par, entry_value, gales, stop_loss, stop_gain, balance_label)).start()
-
-
 
 def iniciar_script():
     selected_option = global_var.get()
+    
     if selected_option == '':
         display_message("")
         display_message("SELECIONE UMA ESTRATÉGIA!")
         display_message("")
-        
-        
     else:
         display_message("")
         display_message("VOCÊ SELECIONOU: " + selected_option)
         display_message("CASO QUEIRA TROCAR, APENAS SELECIONE OUTRA.")
         display_message("")
         
-        
-      
         global thread_started
         if not thread_started:
             thread_started = True
             t = threading.Thread(target=minha_funcao)
             t.start()
         else:
-            
             display_message("SOMENTE ESTRATEGIAS PODEM SER TROCADAS EM TEMPO REAL.")
             display_message("CASO QUEIRA MUDAR DE PAR OU VALOR, REINICIE O TESLA.")
             display_message("")
-    
+
 def run_script(email, password, account, par, entry_value, gales, stop_loss, stop_gain, balance_label):
     def stop(lucro, gain, loss):
         lucro_str = str(round(lucro, 2)).rstrip('0').rstrip('.')  # Limita a duas casas decimais e remove zeros extras
@@ -114,8 +106,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
             display_message("STOP GAIN AS:" + datetime.now().strftime("%H:%M:%S") + " VOCÊ GANHOU: " + str(lucro) + "$")
             sys.exit()
    
-   
-
     def Martingale(valor, payout):
         lucro_esperado = valor * payout
         perca = float(valor)
@@ -123,7 +113,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         while True:
             if round(valor * payout, 2) > round(abs(perca) + lucro_esperado, 2):
                 return round(valor, 2)
-                break
             valor += 0.01
 
     def Payout(par):
@@ -175,15 +164,14 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         sys.exit()
 
     if palavra_chave in conteudo:
-       display_message("TESLA LIBERADO PARA : "+ palavra_chave)
+        display_message("TESLA LIBERADO PARA : " + palavra_chave)
     else:
         display_message("==========================================================================================")
         display_message("")
-        display_message(palavra_chave+": VOCÊ NÃO POSSUI UMA LICENÇA!")
+        display_message(palavra_chave + ": VOCÊ NÃO POSSUI UMA LICENÇA!")
         display_message("PARA ADQUIRIR UMA LICENÇA")
         display_message("ENTRE EM CONTATO PELO WHATSAPP")
         display_message("62996942287")
-       
         display_message("==========================================================================================")
         display_message("")
         time.sleep(20)
@@ -191,23 +179,18 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
     API = IQ_Option(email, password)
     API.connect()
-
     API.change_balance(account)
     saldo_atual = API.get_balance()
     balance_label.config(text=f"Saldo: ${saldo_atual:.2f}")
 
-
     if API.check_connect():
         display_message("CONECTADO COM SUCESSO!")
-    
-     
     else:
         display_message("ERRO AO CONECTAR")
         speak_text("ERRO AO CONECTAR. por favor verifique se se a senha ou email esta correto e se naão tem nenhum espaço entre eles")
         time.sleep(5)
         sys.exit()
       
-  
     lucro = 0
     global operacoes
     
@@ -220,15 +203,10 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     display_message("TESLA INICIADO ÁS :" + datetime.now().strftime("%H:%M:%S"))
     display_message("==========================================================================================")
     display_message("")
-    
 
     while True:
-        
         try:
-            
             while True:
-                
-                
                 selected_option = global_var.get()
                 hora_atual = datetime.now().strftime('%H:%M:%S')
                 agora = datetime.now()
@@ -239,10 +217,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 if selected_option == '3ª = 1ª':
                     entrar = True if minutos % 5 == 0 else False
 
-                    
                 if entrar:
-                    
-    
                     dir = False
                     status = False
 
@@ -250,17 +225,9 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     preco_atual = candles[-1]['close']
                     media_movel = sum(candle['close'] for candle in candles[:-1]) / 21
 
-
-
-
-
-
-
-
-                    
-
-                        #=======================================================3ª = 1ª==============================================================
+                    #=======================================================3ª = 1ª==============================================================
                     if selected_option == '3ª = 1ª':
+                        
                         display_message("================3ª = 1ª=============================================================================")
                         display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
@@ -295,67 +262,62 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 if preco_atual < media_movel and diferenca > limite_venda:
                                     display_message("___SINAL DE ENTRADA: {}\n".format(signal))
                                     display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-                       ####################################################################################################################################################################################
+                        ####################################################################################################################################################################################
                    
-                        velas = API.get_candles(par, 60, 1, time.time())
-                        velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
+                            velas = API.get_candles(par, 60, 1, time.time())
+                            velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
                         
-                        cores = velas[0]
-                            
-                        display_message(cores)
-                            
-                        if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0: dir = 'call'
-                        if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0: dir = 'put'
-                        #=======================================================3ª = 1ª==============================================================
-                    
+                            cores = velas[0]
+                            display_message(cores)
+                        
+                            if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0:
+                                dir = 'call'
+                            if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0:
+                                dir = 'put'
+                    #=======================================================3ª = 1ª==============================================================
                     
                 ####################################################################################################################################################################################
                    
-                    if dir:
-                        
-                        display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
-                        display_message("==========================================================================================")
-                        display_message("")
-                        valor_entrada = valor_entrada_b
-                        for i in range(martingale):
-
-                            if selected_option == '9:30/EURUSD' or selected_option == 'M5':
-                                status, id = API.buy_digital_spot(par, valor_entrada, dir, 5)
-                            else:
-                                status, id = API.buy_digital_spot(par, valor_entrada, dir, 1)
+                if dir:
+                    display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
+                    display_message("==========================================================================================")
+                    display_message("")
+                    valor_entrada = valor_entrada_b
+                    for i in range(martingale):
+                        if selected_option == '9:30/EURUSD' or selected_option == 'M5':
+                            status, id = API.buy_digital_spot(par, valor_entrada, dir, 5)
+                        else:
+                            status, id = API.buy_digital_spot(par, valor_entrada, dir, 1)
+                            
+                        if status:
+                            while True:
+                                status, valor = API.check_win_digital_v2(id)
                                 
-                            if status:
-                                while True:
+                                if status:
+                                    valor = valor if valor > 0 else float('-' + str(abs(valor_entrada)))
+                                    lucro += round(valor, 2)
                                     
-                                    status, valor = API.check_win_digital_v2(id)
-                                    
+                                    display_message('RESULTADO DA OPERAÇÃO: ')
+                                    display_message('WIN ' if valor > 0 else 'LOSS ', round(valor, 2), '/ lucro:', round(lucro, 2), ('/ ' + str(i) + ' GALE' if i > 0 else ''))
+                                    valor_entrada = Martingale(valor_entrada, payout)
+                                    stop(lucro, stop_gain, stop_loss)
+                                    saldo_atual = API.get_balance()
+                                    balance_label.config(text=f"Saldo: ${saldo_atual:.2f}")
+                                    operacoes = operacoes + 1
+                                    display_message("")
+                                    display_message("==========================================================================================")
+                                    display_message("")
+                                    display_message('TRABALHANDO...')
+                                    break
 
-                                    if status:
-                                        valor = valor if valor > 0 else float('-' + str(abs(valor_entrada)))
-                                        lucro += round(valor, 2)
-                                        
-                                        display_message('RESULTADO DA OPERAÇÃO: ')
-                                        display_message('WIN ' if valor > 0 else 'LOSS ', round(valor, 2), '/ lucro:', round(lucro, 2), ('/ ' + str(i) + ' GALE' if i > 0 else ''))
-                                        valor_entrada = Martingale(valor_entrada, payout)
-                                        stop(lucro, stop_gain, stop_loss)
-                                        saldo_atual = API.get_balance()
-                                        balance_label.config(text=f"Saldo: ${saldo_atual:.2f}")
-                                        operacoes = operacoes +1
-                                        display_message("")
-                                        display_message("==========================================================================================")
-                                        display_message("")
-                                        display_message('TRABALHANDO...')
-
-                                        break
-
-                                if valor > 0: break
-
-                            else:
-                                display_message("==========================================================================================")
-                                display_message("")
-                                display_message('ERRO AO REALIZAR OPERAÇÃO!')
-                                display_message("==========================================================================================")
-                                display_message("")
+                                if valor > 0:
+                                    break
+                        else:
+                            display_message("==========================================================================================")
+                            display_message("")
+                            display_message('ERRO AO REALIZAR OPERAÇÃO!')
+                            display_message("==========================================================================================")
+                            display_message("")
                     time.sleep(3)
         except Exception as e:
             display_message("==========================================================================================")
@@ -366,8 +328,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
             display_message("==========================================================================================")
             display_message("")
             time.sleep(3)
-    
-
 
 root = tk.Tk()
 root.title("TESLA 369 BOT - EJS ENTERPRISE")
@@ -426,7 +386,6 @@ tk.Entry(root, textvariable=stop_gain_var).grid(row=7, column=1)
 
 balance_label = tk.Label(root, text="Saldo: $0.00")
 balance_label.grid(row=8, column=1, padx=10, pady=5, columnspan=2)
-
 
 tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
 
