@@ -8,7 +8,6 @@ from datetime import datetime
 import time
 import sys
 import requests
-#import pyttsx3
 url = "https://github.com/Tesla-369-bot/Aprovados/blob/main/Aprovados.md"
 thread_started = False
 operacoes = 0
@@ -79,7 +78,6 @@ def iniciar_script():
         display_message("")
         display_message("SELECIONE UMA ESTRATÉGIA!")
         display_message("")
-       # speak_text("SELECIONE UMA ESTRATÉGIA!")
         
         
     else:
@@ -107,13 +105,11 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         if lucro <= float('-' + str(abs(loss))):
             operacoes = 0
             display_message("STOP LOSS AS:" + datetime.now().strftime("%H:%M:%S") + " VOCÊ PERDEU: " + str(lucro) + "$")
-            #speak_text("Stop loss batido. Sua perda foi de " + lucro_str + ". Não foi dessa vez. Volte apenas amanhã!")
             sys.exit()
 
         if lucro >= float(abs(gain)):
             operacoes = 0
             display_message("STOP GAIN AS:" + datetime.now().strftime("%H:%M:%S") + " VOCÊ GANHOU: " + str(lucro) + "$")
-            #speak_text("Stop gain batido. Seu lucro foi de " + lucro_str + ". Parabéns. Volte apenas amanhã!")
             sys.exit()
    
    
@@ -173,7 +169,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         display_message("62996942287")
         display_message("==========================================================================================")
         display_message("")
-        #speak_text("ROBÔ DESATIVADO POR TEMPO INDETERMINADO! EM CASO DE DUVIDAS ENTRE EM CONTATO PELO WHATSAPP. a E J S agradeçe")
         time.sleep(10)
         sys.exit()
 
@@ -189,7 +184,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
        
         display_message("==========================================================================================")
         display_message("")
-        #speak_text("VOCÊ NÃO POSSUI UMA LICENÇA! PARA ADQUIRIR UMA LICENÇA, ENTRE EM CONTATO PELO WHATSAPP. a E J S agradeçe")
         time.sleep(20)
         sys.exit()
 
@@ -207,7 +201,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         
      #   if not os.path.isfile("boas-vindas-executado2.txt"):
             
-            #speak_text("Parabéns por adiquirir nosso robô")
 
       #  with open("boas-vindas-executado2.txt", "w") as f:
             #f.write("Executado")
@@ -228,7 +221,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
     #display_message("")
     #display_message("PARES EM QUE VOU OPERAR: " + ', '.join(pares_digitais_abertos))
     
-    #speak_text("Tésla iniciado com sucesso. Aguarde e seja paciente, te avisarei quando acontecer alguma operação.")
     display_message("==========================================================================================")
     display_message("")
     display_message("TRABALHANDO... AGUARDE E SEJA PACIENTE!")
@@ -431,7 +423,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                     if selected_option == 'M5':
                         display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
-                        speak_text("Verificando oportunidade no quadrante")
                         time.sleep(293)
                         dir = False
 
@@ -455,7 +446,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         else:
                                 
                             display_message("QUADRANTE SEM OPORTUNIDADE :" + datetime.now().strftime("%H:%M:%S"))
-                          #  speak_text("Quadrante sem oportunidade. seguindo!")
                         
 
                         
@@ -469,17 +459,9 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                             if selected_option == '9:30/EURUSD' or selected_option == 'M5':
                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 5)
-                                #if dir == 'call':
-                                   # speak_text("Operação de compra iniciada")
-                               # if dir == 'put':
-                                   # speak_text("Operação de venda iniciada")
+                              
                             else:
-                                if dir == 'call':
-                                    status, id = API.buy_digital_spot(par, valor_entrada, dir, 1)
-                                    speak_text("Operação de compra iniciada")
-                                if dir == 'put':
-                                    status, id = API.buy_digital_spot(par, valor_entrada, dir, 1)
-                                    speak_text("Operação de venda iniciada")
+                                 status, id = API.buy_digital_spot(par, valor_entrada, dir, 1)
                             if status:
                                 while True:
                                     
@@ -512,7 +494,6 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 display_message('ERRO AO REALIZAR OPERAÇÃO!')
                                 display_message("==========================================================================================")
                                 display_message("")
-                                #speak_text("ERRO AO REALIZAR OPERAÇÃO")
                     time.sleep(3)
         except Exception as e:
             display_message("==========================================================================================")
