@@ -272,9 +272,16 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
             time.sleep(5)
 
 root = tk.Tk()
-root.title("Tesla 369 Bot")
+root.title("TESLA 369 BOT - EJS ENTERPRISE")
+root.geometry("400x600")
+checkbox_var = tk.BooleanVar()
 
-# Variables
+root.columnconfigure(0, weight=1)
+root.columnconfigure(1, weight=1)
+root.rowconfigure(9, weight=1)
+
+root.configure(bg="white")
+
 email_var = tk.StringVar()
 password_var = tk.StringVar()
 account_var = tk.StringVar()
@@ -283,44 +290,58 @@ entry_value_var = tk.StringVar()
 gales_var = tk.StringVar()
 stop_loss_var = tk.StringVar()
 stop_gain_var = tk.StringVar()
-
-global_var = tk.StringVar(value='')
-
-# Create widgets
-tk.Label(root, text="Email:").grid(row=0, column=0)
-tk.Entry(root, textvariable=email_var).grid(row=0, column=1)
-
-tk.Label(root, text="Password:").grid(row=1, column=0)
-tk.Entry(root, textvariable=password_var, show='*').grid(row=1, column=1)
-
-tk.Label(root, text="Account Balance:").grid(row=2, column=0)
-tk.Entry(root, textvariable=account_var).grid(row=2, column=1)
-
-tk.Label(root, text="Pair:").grid(row=3, column=0)
-tk.Entry(root, textvariable=par_var).grid(row=3, column=1)
-
-tk.Label(root, text="Entry Value:").grid(row=4, column=0)
-tk.Entry(root, textvariable=entry_value_var).grid(row=4, column=1)
-
-tk.Label(root, text="Gales:").grid(row=5, column=0)
-tk.Entry(root, textvariable=gales_var).grid(row=5, column=1)
-
-tk.Label(root, text="Stop Loss:").grid(row=6, column=0)
-tk.Entry(root, textvariable=stop_loss_var).grid(row=6, column=1)
-
-tk.Label(root, text="Stop Gain:").grid(row=7, column=0)
-tk.Entry(root, textvariable=stop_gain_var).grid(row=7, column=1)
-
-tk.Label(root, text="Strategy:").grid(row=8, column=0)
-tk.OptionMenu(root, global_var, '3ª = 1ª').grid(row=8, column=1)
-
-tk.Button(root, text="Start", command=iniciar_script).grid(row=9, column=0, columnspan=2)
-
-listbox = tk.Listbox(root, width=100, height=20)
-listbox.grid(row=10, column=0, columnspan=2)
-
-balance_label = tk.Label(root, text="Saldo: $0.00")
-balance_label.grid(row=11, column=0, columnspan=2)
+global_var = tk.StringVar()
 
 load_credentials()
+
+scrollbar = tk.Scrollbar(root)
+scrollbar.grid(row=9, column=1, sticky='nsew')
+
+listbox = tk.Listbox(root, yscrollcommand=scrollbar.set, width=50, height=10, bg="black", fg="yellow")
+listbox.grid(row=9, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
+
+scrollbar.config(command=listbox.yview)
+
+tk.Label(root, text="E-mail:").grid(row=0, column=0, sticky="e")
+tk.Entry(root, textvariable=email_var).grid(row=0, column=1)
+
+tk.Label(root, text="Senha:").grid(row=1, column=0, sticky="e")
+tk.Entry(root, textvariable=password_var, show="*").grid(row=1, column=1)
+
+tk.Label(root, text="Conta (REAL/PRACTICE):").grid(row=2, column=0, sticky="e")
+tk.Entry(root, textvariable=account_var).grid(row=2, column=1)
+
+tk.Label(root, text="Par (EURUSD/EURUSD-OTC):").grid(row=3, column=0, sticky="e")
+tk.Entry(root, textvariable=par_var).grid(row=3, column=1)
+
+tk.Label(root, text="Valor de entrada:").grid(row=4, column=0, sticky="e")
+tk.Entry(root, textvariable=entry_value_var).grid(row=4, column=1)
+
+tk.Label(root, text="Gales:").grid(row=5, column=0, sticky="e")
+tk.Entry(root, textvariable=gales_var).grid(row=5, column=1)
+
+tk.Label(root, text="Stop Loss:").grid(row=6, column=0, sticky="e")
+tk.Entry(root, textvariable=stop_loss_var).grid(row=6, column=1)
+
+tk.Label(root, text="Stop Gain:").grid(row=7, column=0, sticky="e")
+tk.Entry(root, textvariable=stop_gain_var).grid(row=7, column=1)
+
+balance_label = tk.Label(root, text="Saldo: $0.00")
+balance_label.grid(row=8, column=1, padx=10, pady=5, columnspan=2)
+
+
+tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
+
+options = ["TESLA-369", "MHI-FILTRADO", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5"]
+option_menu = tk.OptionMenu(root, global_var, *options)
+option_menu.grid(row=8, column=0, sticky="e")
+
+start_button = tk.Button(root, text="Iniciar", command=iniciar_script)
+start_button.grid(row=8, column=1, sticky="w")
+
+def on_closing():
+    save_credentials()
+    root.destroy()
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
