@@ -139,7 +139,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         return d
 
 
-    def IA():
+    def IA(signal):
         
 
         diferenca = preco_atual - media_movel
