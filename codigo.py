@@ -306,7 +306,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                 
                 if selected_option == '3ª = 1ª':
-                    entrar = True if minutos % 5 == 0 else False
+                    entrar = True #if minutos % 5 == 0 else False
 
 
               
