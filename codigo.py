@@ -193,7 +193,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
         
 
-
+        return signal
 
     
     display_message("== EJS ENTERPRISE ==")
@@ -293,6 +293,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 minutos = agora.minute
                 segundos = agora.second
                 payout = Payout(par)
+                signal = IA(signal)
+
                 
               
 
@@ -343,18 +345,21 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                         #=======================================================3ª = 1ª==============================================================
                     if selected_option == '3ª = 1ª':
+                        
                         display_message("================3ª = 1ª=============================================================================")
                         display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
                         display_message("")
-                        #time.sleep(118)
                         velas = API.get_candles(par, 60, 1, time.time())
                         velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
                         cores = velas[0]
-                        display_message(cores)
+                        signal = ""  # Inicializa signal
                         IA(signal)
-                        if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0: dir = 'call'
-                        if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0: dir = 'put'
+                        if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0:
+                            dir = 'call'
+                        if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0:
+                            dir = 'put'
+
                         
                         
                     if dir:
