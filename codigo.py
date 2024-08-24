@@ -218,7 +218,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     entrar = True if minutos % 5 == 0 else False
 
                 if entrar:
-                    dir = False
+                    dir = None
                     status = False
 
                     candles = API.get_candles(par, 60, 22, time.time())
