@@ -329,6 +329,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 
                         #=======================================================3ª = 1ª==============================================================
                     if selected_option == '3ª = 1ª':
+                        
                         display_message("================3ª = 1ª=============================================================================")
                         display_message("")
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
