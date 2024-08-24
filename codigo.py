@@ -257,7 +257,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
 
 
-                    ##########################################################################################
+                    ####################################################################################################################################################################################
                     diferenca = preco_atual - media_movel
                     limite_compra = 0.30
                     limite_venda = -0.30
@@ -286,12 +286,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                             if preco_atual < media_movel and diferenca > limite_venda:
                                 display_message("___SINAL DE ENTRADA: {}\n".format(signal))
                                 display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-                    if confidence < 51 or confidence > 75:
-                        display_message("___SINAL DE ENTRADA: {}\n".format(signal))
-                        display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-                        display_message("___FORA DO ESPERADO!")
-                        time.sleep(50)
-                    ##########################################################################################
+                   ####################################################################################################################################################################################
+                   
 
                         #=======================================================3ª = 1ª==============================================================
                         if selected_option == '3ª = 1ª':
@@ -309,9 +305,11 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                             
                             if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0: dir = 'call'
                             if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0: dir = 'put'
-                         
-                     
-                        
+                        #=======================================================3ª = 1ª==============================================================
+                    
+                    
+                ####################################################################################################################################################################################
+                   
                     if dir:
                         
                         display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
