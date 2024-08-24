@@ -352,6 +352,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
                         cores = velas[0]
                         display_message(cores)
+                        IA()
                         if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0: dir = 'call'
                         if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0: dir = 'put'
                         
