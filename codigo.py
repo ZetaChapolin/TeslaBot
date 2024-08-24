@@ -334,6 +334,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     candles = API.get_candles(par, 60, 22, time.time())
                     preco_atual = candles[-1]['close']
                     media_movel = sum(candle['close'] for candle in candles[:-1]) / 21
+                    IA()
 
 
                     
