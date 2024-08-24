@@ -15,7 +15,7 @@ from datetime import datetime
 import time
 import sys
 import requests
-url = "https://github.com/Tesla-369-bot/Aprovados/blob/main/Aprovados.md"
+url = "https://github.com/ZetaChapolin/TeslaBot/blob/main/aprovados.md"
 thread_started = False
 operacoes = 0
 
