@@ -263,17 +263,18 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                     display_message("___SINAL DE ENTRADA: {}\n".format(signal))
                                     display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
                         ####################################################################################################################################################################################
-                   
-                            velas = API.get_candles(par, 60, 1, time.time())
-                            velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
-                        
-                            cores = velas[0]
-                            display_message(cores)
-                        
-                            if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0:
-                                dir = 'call'
-                            if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0:
-                                dir = 'put'
+                    
+                        velas = API.get_candles(par, 60, 1, time.time())
+                        velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
+                    
+                        cores = velas[0]
+                        display_message(cores)
+                    
+                        if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0:
+                            dir = 'call'
+                        if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0:
+                            dir = 'put'
+
                     #=======================================================3ª = 1ª==============================================================
                     
                 ####################################################################################################################################################################################
