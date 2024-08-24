@@ -137,41 +137,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
         API.unsubscribe_strike_list(par, 1)
 
         return d
-    def IA(signal):
-        diferenca = preco_atual - media_movel
-        limite_compra = 0.30
-        limite_venda = -0.30
-        candles = API.get_candles(par, 60, 200, time.time())
-        if candles is None:
-            display_message("___Erro ao obter os dados do par.\n")
-            return
-        X = np.array([candle["close"] for candle in candles])
-        y = np.array([1 if candle["close"] > candle["open"] else 0 for candle in candles])
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        model = RandomForestClassifier(n_estimators=100, random_state=42)
-        model.fit(X_train.reshape(-1, 1), y_train)
-        accuracy = model.score(X_test.reshape(-1, 1), y_test)
-        new_data = np.array([X[-1]])
-        prediction = model.predict(new_data.reshape(-1, 1))
-        confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
-        signal = "COMPRA" if prediction[0] == 1 else "VENDA"
-        confidence = accuracy * 100
-        display_message('___ANALISANDO PAR AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
-        if confidence < 51 or confidence > 75:
-            display_message("___SINAL DE ENTRADA: {}\n".format(signal))
-            display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-            display_message("___FORA DO ESPERADO!")
-            time.sleep(50)
-        if confidence >= 51 and confidence <= 75:
-            if signal == "COMPRA":
-                if preco_atual > media_movel and diferenca < limite_compra:
-                    display_message("___SINAL DE ENTRADA: {}\n".format(signal))
-                    display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-            if signal == "VENDA":
-                if preco_atual < media_movel and diferenca > limite_venda:
-                    display_message("___SINAL DE ENTRADA: {}\n".format(signal))
-                    display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
-        
+
     display_message("== EJS ENTERPRISE ==")
     display_message("== TESLA 369 - BOT ==")
     display_message("== O PODER DOS NUMEROS ==")
@@ -269,44 +235,10 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 minutos = agora.minute
                 segundos = agora.second
                 payout = Payout(par)
-                signal = IA(signal)
-                
               
-
-                if selected_option == '9:30/EURUSD':
-                    entrar = True if (hora_atual >= '09:34:57') and hora_atual <= '09:35:06' else False
-                    par = 'EURUSD'
-                    stop_gain = 0
-
-                if selected_option == 'QUADRANTE DE 7':
-                    entrar = True if minutos % 5 == 0 else False
-
-                
                 if selected_option == '3ª = 1ª':
-                    entrar = True #if minutos % 5 == 0 else False
-
-
-              
-                if selected_option == 'MHI-FILTRADO':
                     entrar = True if minutos % 5 == 0 else False
 
-                
-                if selected_option == 'REVERSÃO':
-                    entrar = True if segundos % 55 == 0 else False
-
-
-                if selected_option == 'FLUXO-DE-VELAS':
-                    entrar = True if segundos % 55 == 0 else False
-                    
-                    
-                if selected_option == 'TESLA-369':
-                    entrar = True if minutos % 5 == 0 else False
-
-
-                if selected_option == 'M5':
-                    entrar = True if minutos % 15 == 0 else False
-
-                    
                     
                 if entrar:
                     
@@ -319,6 +251,67 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     media_movel = sum(candle['close'] for candle in candles[:-1]) / 21
 
 
+
+
+
+
+
+
+                    ##########################################################################################
+                    diferenca = preco_atual - media_movel
+                    limite_compra = 0.30
+                    limite_venda = -0.30
+                    candles = API.get_candles(par, 60, 200, time.time())
+                    if candles is None:
+                        display_message("___Erro ao obter os dados do par.\n")
+                        return
+                    X = np.array([candle["close"] for candle in candles])
+                    y = np.array([1 if candle["close"] > candle["open"] else 0 for candle in candles])
+                    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+                    model = RandomForestClassifier(n_estimators=100, random_state=42)
+                    model.fit(X_train.reshape(-1, 1), y_train)
+                    accuracy = model.score(X_test.reshape(-1, 1), y_test)
+                    new_data = np.array([X[-1]])
+                    prediction = model.predict(new_data.reshape(-1, 1))
+                    confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
+                    signal = "COMPRA" if prediction[0] == 1 else "VENDA"
+                    confidence = accuracy * 100
+                    display_message('___ANALISANDO CONFIANÇA AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
+                    if confidence >= 51 and confidence <= 75:
+                        if signal == "COMPRA":
+                            if preco_atual > media_movel and diferenca < limite_compra:
+                                display_message("___SINAL DE ENTRADA: {}\n".format(signal))
+                                display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
+                        if signal == "VENDA":
+                            if preco_atual < media_movel and diferenca > limite_venda:
+                                display_message("___SINAL DE ENTRADA: {}\n".format(signal))
+                                display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
+                    if confidence < 51 or confidence > 75:
+                        display_message("___SINAL DE ENTRADA: {}\n".format(signal))
+                        display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
+                        display_message("___FORA DO ESPERADO!")
+                        time.sleep(50)
+                    ##########################################################################################
+
+                        #=======================================================3ª = 1ª==============================================================
+                        if selected_option == '3ª = 1ª':
+                            display_message("================3ª = 1ª=============================================================================")
+                            display_message("")
+                            display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                            display_message("")
+                            time.sleep(118)
+                            velas = API.get_candles(par, 60, 1, time.time())
+                            velas[0] = 'g' if velas[0]['open'] < velas[0]['close'] else 'r' if velas[0]['open'] > velas[0]['close'] else 'd'
+                            
+                            cores = velas[0]
+                            
+                            display_message(cores)
+                            
+                            if signal == "COMPRA" and preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0: dir = 'call'
+                            if signal == "VENDA" and preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0: dir = 'put'
+                         
+                     
+                        
                     if dir:
                         
                         display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
