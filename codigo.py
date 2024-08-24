@@ -252,16 +252,18 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
                         signal = "COMPRA" if prediction[0] == 1 else "VENDA"
                         confidence = accuracy * 100
-                        display_message('___ANALISANDO CONFIANÇA AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
+                        display_message('ANALISANDO CONFIANÇA AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
+                        display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                        display_message("CONFIANCA: {:.2f}%\n".format(confidence))
                         if confidence >= 51 and confidence <= 75:
                             if signal == "COMPRA":
                                 if preco_atual > media_movel and diferenca < limite_compra:
-                                    display_message("___SINAL DE ENTRADA: {}\n".format(signal))
-                                    display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
+                                    display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                                    display_message("CONFIANCA: {:.2f}%\n".format(confidence))
                             if signal == "VENDA":
                                 if preco_atual < media_movel and diferenca > limite_venda:
-                                    display_message("___SINAL DE ENTRADA: {}\n".format(signal))
-                                    display_message("___CONFIANCA: {:.2f}%\n".format(confidence))
+                                    display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                                    display_message("CONFIANCA: {:.2f}%\n".format(confidence))
                         ####################################################################################################################################################################################
                     
                             velas = API.get_candles(par, 60, 1, time.time())
