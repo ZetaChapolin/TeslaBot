@@ -17,7 +17,7 @@ import sys
 import requests
 url = "https://github.com/Tesla-369-bot/Aprovados/blob/main/Aprovados.md"
 thread_started = False
-operacoes = 0
+
 
     
 def display_message(*args):
@@ -268,7 +268,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
   
     lucro = 0
     global operacoes
-    
+    operacoes = 0
     display_message("==========================================================================================")
     display_message("")
     display_message("TRABALHANDO... AGUARDE E SEJA PACIENTE!")
