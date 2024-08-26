@@ -1,17 +1,4 @@
-import tkinter as tk
-from tkinter import messagebox
-import threading
-import json
-import os
-from iqoptionapi.stable_api import IQ_Option
-from datetime import datetime
-import time
-import sys
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-import pyttsx3
-import requests
+
 
 url = "https://github.com/ZetaChapolin/TeslaBot/blob/main/aprovados.md"
 thread_started = False
