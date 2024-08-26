@@ -335,6 +335,68 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
 
 
+
+                    candles = API.get_candles(par, 60, 200, time.time())
+
+                    if candles is None:
+                        info_texto.insert(tk.END, "___Erro ao obter os dados do par.\n")
+                        return
+
+                    X = np.array([candle["close"] for candle in candles])
+                    y = np.array([1 if candle["close"] > candle["open"] else 0 for candle in candles])
+
+                    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+                    model = RandomForestClassifier(n_estimators=100, random_state=42)
+                    model.fit(X_train.reshape(-1, 1), y_train)
+
+                    accuracy = model.score(X_test.reshape(-1, 1), y_test)
+
+                    new_data = np.array([X[-1]])
+                    prediction = model.predict(new_data.reshape(-1, 1))
+                    confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
+                    signal = "COMPRA" if prediction[0] == 1 else "VENDA"
+                    confidence = accuracy * 100
+                    info_texto.insert(tk.END, '=======================================================\n')
+                    info_texto.insert(tk.END, '___ANALISANDO PAR AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
+
+                    if confidence < 51 or confidence > 75:
+                        info_texto.insert(tk.END, "___SINAL DE ENTRADA: {}\n".format(signal))
+                        info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
+                        info_texto.insert(tk.END, "___FORA DO ESPERADO!")
+                
+                
+                    if confidence >= 51 and confidence <= 75:
+                        time.sleep(27)
+                    
+                        if signal == "COMPRA":
+                        
+                            #if preco_atual > media_movel and diferenca < limite_compra:
+                            info_texto.insert(tk.END, "___SINAL DE ENTRADA: {}\n".format(signal))
+                            info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
+                            #speak_text('Compra.')
+                            time.sleep(29)
+                            dir = 'call'
+                            #else:
+                                #info_texto.insert(tk.END, '\n\n')
+                                #info_texto.insert(tk.END,"___EU IRIA COMPRAR! MAS O PRECO ESTA ABAIXO DA MEDIA MOVEL OU MUITO ELEVADO.\n")
+                                #info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
+
+                        if signal == "VENDA":
+                        
+                            #if preco_atual < media_movel and diferenca > limite_venda:
+                            info_texto.insert(tk.END, "___SINAL DE ENTRADA: {}\n".format(signal))
+                            info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
+                              #  speak_text('Venda.')
+                            time.sleep(29)
+                            dir = 'put'
+                            #else:
+                                #info_texto.insert(tk.END, '\n\n')
+                                #info_texto.insert(tk.END,"___EU IRIA VENDER! MAS O PRECO ESTA ACIMA DA MEDIA MOVEL OU MUITO BAIXO.\n")
+                                #info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
+
+
+
                     
                     #=======================================================FLUXO==============================================================
                     if selected_option == 'FLUXO-DE-VELAS':
