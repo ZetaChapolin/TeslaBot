@@ -277,8 +277,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 payout = Payout(par)
 
                 
-                if selected_option == 'teste':
-                    entrar = True if segundos % 55 == 0 else False
+                #if selected_option == 'teste':
+                    #entrar = True if segundos % 55 == 0 else False
 
                 
                 if selected_option == 'IA':
@@ -296,8 +296,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                 
                 if selected_option == '3ª = 1ª':
-                    #entrar = True if minutos % 5 == 0 else False
-                    entrar = True if (minutos >= 1.57 and minutos <= 2) or minutos >= 6.57 and minutos <= 7 else False
+                    entrar = True if minutos % 5 == 0 else False
 
               
                 if selected_option == 'MHI-FILTRADO':
@@ -480,7 +479,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     if selected_option == '3ª = 1ª':
                         display_message('=======================================================\n')
                         display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
-                        #time.sleep(117)
+                        time.sleep(117)
                         velas = API.get_candles(par, 60, 2, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -714,7 +713,7 @@ start_button = tk.Button(root, text="Iniciar", command=iniciar_script)
 start_button.grid(row=8, column=1, sticky="w")
 
 # Adicionando o Checkbutton para ativar/desativar a opção
-tk.Checkbutton(root, text="Ativar Soros - Estrategias >>>", variable=checkbox_var).grid(row=8, column=0, sticky="w")
+tk.Checkbutton(root, text="Ativar Soros", variable=checkbox_var).grid(row=8, column=0, sticky="w")
 
 
 def on_closing():
