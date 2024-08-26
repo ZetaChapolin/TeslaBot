@@ -367,7 +367,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                      #=============================================ESTRATEGIA QUADRANTE DE 7========================================================
                     if selected_option == 'QUADRANTE DE 7':
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        time.sleep(115)
+                        time.sleep(117)
                         velas = API.get_candles(par, 60, 7, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -380,7 +380,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     #=============================================ESTRATEGIA TESLA 369========================================================
                     if selected_option == 'TESLA-369':
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        time.sleep(115)
+                        time.sleep(117)
                         velas = API.get_candles(par, 60, 6, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -406,7 +406,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     #=======================================================3ª = 1ª==============================================================
                     if selected_option == '3ª = 1ª':
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        time.sleep(115)
+                        time.sleep(117)
                         velas = API.get_candles(par, 60, 2, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -478,15 +478,16 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                          #=======================================================M30==============================================================
                     if selected_option == 'M30':
                         display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        time.sleep(1790)
                         velas = API.get_candles(par, 60*30, 2, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
 
                         cores = ' '.join(velas)
                         display_message(cores)
-                        if velas[0] == 'r' and velas[1] == 'g' and cores.count('d') == 0: dir = 'call'
-                        if velas[0] == 'g' and velas[1] == 'r' and cores.count('d') == 0: dir = 'put'
+                        if velas[0] == 'r' and velas[1] == 'g' and cores.count('d') == 0:
+                                speak_text("Faça uma compra")
+                        if velas[0] == 'g' and velas[1] == 'r' and cores.count('d') == 0:
+                                speak_text("Faça uma venda")
 
                     if dir:
                         
