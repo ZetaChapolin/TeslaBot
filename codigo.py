@@ -270,30 +270,38 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                 
                 #for par in pares_digitais_abertos:
                 selected_option = global_var.get()
-                
                 hora_atual = datetime.now().strftime('%H:%M:%S')
                 agora = datetime.now()
                 minutos = agora.minute
                 segundos = agora.second
                 payout = Payout(par)
+
                 
-               
+                if selected_option == 'teste':
+                    entrar = True if segundos % 55 == 0 else False
+
+                
+                if selected_option == 'IA':
+                    entrar = True if segundos % 55 == 0 else False
+
 
                 if selected_option == '9:30/EURUSD':
                     entrar = True if (hora_atual >= '09:34:57') and hora_atual <= '09:35:06' else False
                     par = 'EURUSD'
                     stop_gain = 0
 
+
                 if selected_option == 'QUADRANTE DE 7':
                     entrar = True if minutos % 5 == 0 else False
 
                 
                 if selected_option == '3ª = 1ª':
-                    entrar = True if minutos % 5 == 0 else False
+                    #entrar = True if minutos % 5 == 0 else False
+                    entrar = True if (minutos >= 1.57 and minutos <= 2) or minutos >= 6.57 and minutos <= 7 else False
 
               
-                #if selected_option == 'MHI-FILTRADO':
-                    #entrar = True if minutos % 5 == 0 else False
+                if selected_option == 'MHI-FILTRADO':
+                    entrar = True if (minutos >= 4.57 and minutos <= 5) or minutos >= 9.57 else False
 
                 
                 if selected_option == 'REVERSÃO':
@@ -310,9 +318,11 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                 if selected_option == 'M5':
                     entrar = True if minutos % 15 == 0 else False
+
                
                 if selected_option == 'M5_INVERTIDO':
                     entrar = True if minutos % 15 == 0 else False 
+
 
                 if selected_option == 'M30':
 
@@ -333,74 +343,71 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     preco_atual = candles[-1]['close']
                     media_movel = sum(candle['close'] for candle in candles[:-1]) / 21
 
+                    if selected_option == 'teste':
+                        dir = 'put'
+                        
 
 
+                    #=======================================================IA==============================================================
+                    if selected_option == 'IA':
+                        
+                        candles = API.get_candles(par, 60, 200, time.time())
 
-                    candles = API.get_candles(par, 60, 200, time.time())
+                        if candles is None:
+                            display_message("Erro ao obter os dados do par.\n")
+                            return
 
-                    if candles is None:
-                        info_texto.insert(tk.END, "___Erro ao obter os dados do par.\n")
-                        return
+                        X = np.array([candle["close"] for candle in candles])
+                        y = np.array([1 if candle["close"] > candle["open"] else 0 for candle in candles])
 
-                    X = np.array([candle["close"] for candle in candles])
-                    y = np.array([1 if candle["close"] > candle["open"] else 0 for candle in candles])
+                        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-                    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+                        model = RandomForestClassifier(n_estimators=100, random_state=42)
+                        model.fit(X_train.reshape(-1, 1), y_train)
 
-                    model = RandomForestClassifier(n_estimators=100, random_state=42)
-                    model.fit(X_train.reshape(-1, 1), y_train)
+                        accuracy = model.score(X_test.reshape(-1, 1), y_test)
 
-                    accuracy = model.score(X_test.reshape(-1, 1), y_test)
-
-                    new_data = np.array([X[-1]])
-                    prediction = model.predict(new_data.reshape(-1, 1))
-                    confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
-                    signal = "COMPRA" if prediction[0] == 1 else "VENDA"
-                    confidence = accuracy * 100
-                    info_texto.insert(tk.END, '=======================================================\n')
-                    info_texto.insert(tk.END, '___ANALISANDO PAR AS: ' + datetime.now().strftime("%H:%M:%S") + '\n')
-
-                    if confidence < 51 or confidence > 75:
-                        info_texto.insert(tk.END, "___SINAL DE ENTRADA: {}\n".format(signal))
-                        info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
-                        info_texto.insert(tk.END, "___FORA DO ESPERADO!")
-                
-                
-                    if confidence >= 51 and confidence <= 75:
-                        time.sleep(27)
+                        new_data = np.array([X[-1]])
+                        prediction = model.predict(new_data.reshape(-1, 1))
+                        confidence = model.predict_proba(new_data.reshape(-1, 1))[0][prediction[0]]
+                        signal = "COMPRA" if prediction[0] == 1 else "VENDA"
+                        confidence = accuracy * 100
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                     
-                        if signal == "COMPRA":
+                    
+                        if confidence >= 51 and confidence <= 75:
+                            time.sleep(27)
                         
-                            #if preco_atual > media_movel and diferenca < limite_compra:
-                            info_texto.insert(tk.END, "___SINAL DE ENTRADA: {}\n".format(signal))
-                            info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
-                            #speak_text('Compra.')
-                            time.sleep(29)
-                            dir = 'call'
-                            #else:
-                                #info_texto.insert(tk.END, '\n\n')
-                                #info_texto.insert(tk.END,"___EU IRIA COMPRAR! MAS O PRECO ESTA ABAIXO DA MEDIA MOVEL OU MUITO ELEVADO.\n")
-                                #info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
-
-                        if signal == "VENDA":
-                        
-                            #if preco_atual < media_movel and diferenca > limite_venda:
-                            info_texto.insert(tk.END, "___SINAL DE ENTRADA: {}\n".format(signal))
-                            info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
-                              #  speak_text('Venda.')
-                            time.sleep(29)
-                            dir = 'put'
-                            #else:
-                                #info_texto.insert(tk.END, '\n\n')
-                                #info_texto.insert(tk.END,"___EU IRIA VENDER! MAS O PRECO ESTA ACIMA DA MEDIA MOVEL OU MUITO BAIXO.\n")
-                                #info_texto.insert(tk.END, "___CONFIANCA: {:.2f}%\n".format(confidence))
-
-
+                            if signal == "COMPRA":
+                            
+                                if preco_atual > media_movel:
+                                    display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                                    display_message("CONFIANCA: {:.2f}%\n".format(confidence))
+                                    time.sleep(29)
+                                    dir = 'call'
+                                    
+                            if signal == "VENDA":
+                            
+                                if preco_atual < media_movel:
+                                    display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                                    display_message("CONFIANCA: {:.2f}%\n".format(confidence))
+                                    time.sleep(29)
+                                    dir = 'put'
+                                    
+                        if confidence < 51 or confidence > 75:
+                            display_message("SINAL DE ENTRADA: {}\n".format(signal))
+                            display_message("CONFIANCA: {:.2f}%\n".format(confidence))
+                            display_message("FORA DO ESPERADO!")
+                            time.sleep(3)
+                    #=======================================================IA==============================================================
+                            
 
                     
                     #=======================================================FLUXO==============================================================
                     if selected_option == 'FLUXO-DE-VELAS':
-                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         velas = API.get_candles(par, 60, 5, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -414,7 +421,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     
                      #=======================================================9:30==============================================================
                     if selected_option == '9:30/EURUSD':
-                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         velas = API.get_candles(par, 300, 1, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -428,7 +436,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                      #=============================================ESTRATEGIA QUADRANTE DE 7========================================================
                     if selected_option == 'QUADRANTE DE 7':
-                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         time.sleep(117)
                         velas = API.get_candles(par, 60, 7, time.time())
                         for i, vela in enumerate(velas):
@@ -441,7 +450,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                     #=============================================ESTRATEGIA TESLA 369========================================================
                     if selected_option == 'TESLA-369':
-                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         time.sleep(117)
                         velas = API.get_candles(par, 60, 6, time.time())
                         for i, vela in enumerate(velas):
@@ -455,7 +465,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                     #=============================================ESTRATEGIA MHI COM FILTRO====================================================
                     if selected_option == 'MHI-FILTRADO':
-                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         velas = API.get_candles(par, 60, 5, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -467,8 +478,9 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                             
                     #=======================================================3ª = 1ª==============================================================
                     if selected_option == '3ª = 1ª':
-                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
-                        time.sleep(117)
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
+                        #time.sleep(117)
                         velas = API.get_candles(par, 60, 2, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -483,7 +495,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                    
                     #==========================================ESTRATEGIA REVERSÃO========================================================
                     if selected_option == 'REVERSÃO':
-                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         velas = API.get_candles(par, 60, 5, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -495,7 +508,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                     #==========================================ESTRATEGIA M5========================================================
                     if selected_option == 'M5':
-                        display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         time.sleep(291)
                         velas = API.get_candles(par, 300, 4, time.time())
 
@@ -517,7 +531,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                     #==========================================ESTRATEGIA M5-INVERTIDO========================================================
                     if selected_option == 'M5-INVERTIDO':
-                        display_message("VERIFICANDO QUADRANTE AS:" + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         time.sleep(591)
                         velas = API.get_candles(par, 300, 5, time.time())
 
@@ -539,7 +554,8 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                         
                          #=======================================================M30==============================================================
                     if selected_option == 'M30':
-                        display_message('VERIFICANDO: ' + str(par) + ' às ' + datetime.now().strftime("%H:%M:%S"))
+                        display_message('=======================================================\n')
+                        display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
                         velas = API.get_candles(par, 60*30, 2, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
@@ -553,7 +569,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
 
                     if dir:
                         
-                        display_message('OPERAÇÃO EM :', par, dir, ' às', datetime.now().strftime("%H:%M:%S"))
+                        display_message('OPERAÇÃO EM :', par, dir, ' ÁS', datetime.now().strftime("%H:%M:%S"))
                         display_message("==========================================================================================")
                         display_message("")
                         valor_entrada = valor_entrada_b
@@ -590,9 +606,10 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                         display_message('WIN ' if valor > 0 else 'LOSS ', round(valor, 2), '/ lucro:', round(lucro, 2), ('/ ' + str(i) + ' GALE' if i > 0 else ''))
                                         valor_entrada = Martingale(valor_entrada, payout)
                                         stop(lucro, stop_gain, stop_loss)
-                                        if valor > 0:
+                                        
+                                        if valor > 0 and checkbox_var.get():
                                             soros = lucro
-                                            valor_entrada_b = soros # Aumenta o valor da entrada para o próximo martingale
+                                            valor_entrada_b = soros  # Aumenta o valor da entrada para o próximo martingale
                                             display_message(soros)
                                         
                                             
@@ -687,14 +704,17 @@ balance_label = tk.Label(root, text="Saldo: $0.00")
 balance_label.grid(row=8, column=1, padx=10, pady=5, columnspan=2)
 
 
-tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
+#tk.Label(root, text="Estrategias:").grid(row=8, column=0, sticky="w")
 
-options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "M5_INVERTIDO", "M30"]
+options = ["TESLA-369", "3ª = 1ª", "QUADRANTE DE 7","MHI-FILTRADO","FLUXO-DE-VELAS", "9:30/EURUSD", "REVERSÃO", "M5", "M5_INVERTIDO", "M30","IA"]
 option_menu = tk.OptionMenu(root, global_var, *options)
 option_menu.grid(row=8, column=0, sticky="e")
 
 start_button = tk.Button(root, text="Iniciar", command=iniciar_script)
 start_button.grid(row=8, column=1, sticky="w")
+
+# Adicionando o Checkbutton para ativar/desativar a opção
+tk.Checkbutton(root, text="Ativar Soros - Estrategias >>>", variable=checkbox_var).grid(row=8, column=0, sticky="w")
 
 
 def on_closing():
