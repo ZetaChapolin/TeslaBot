@@ -383,7 +383,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 if preco_atual > media_movel:
                                     display_message("SINAL DE ENTRADA: {}\n".format(signal))
                                     display_message("CONFIANCA: {:.2f}%\n".format(confidence))
-                                    time.sleep(28)
+                                    time.sleep(29)
                                     dir = 'call'
                                     
                             if signal == "VENDA":
@@ -391,7 +391,7 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                 if preco_atual < media_movel:
                                     display_message("SINAL DE ENTRADA: {}\n".format(signal))
                                     display_message("CONFIANCA: {:.2f}%\n".format(confidence))
-                                    time.sleep(28)
+                                    time.sleep(29)
                                     dir = 'put'
                                     
                         if confidence < 51 or confidence > 75:
