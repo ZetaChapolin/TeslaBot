@@ -479,15 +479,15 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                     if selected_option == '3ª = 1ª':
                         display_message('=======================================================\n')
                         display_message('VERIFICANDO: ' + str(par) + ' NA ESTRATEGIA: ' + str(selected_option) + ' ÁS ' + datetime.now().strftime("%H:%M:%S"))
-                        time.sleep(117)
-                        velas = API.get_candles(par, 60, 2, time.time())
+                        time.sleep(177)
+                        velas = API.get_candles(par, 60, 3, time.time())
                         for i, vela in enumerate(velas):
                             velas[i] = 'g' if vela['open'] < vela['close'] else 'r' if vela['open'] > vela['close'] else 'd'
 
                         cores = ' '.join(velas)
                         display_message(cores)
-                        if preco_atual > media_movel and velas[0] == 'g' and cores.count('d') == 0: dir = 'call'
-                        if preco_atual < media_movel and velas[0] == 'r' and cores.count('d') == 0: dir = 'put'
+                        if preco_atual > media_movel and velas[0] == 'g' and velas[2] == 'r' and cores.count('d') == 0: dir = 'call'
+                        if preco_atual < media_movel and velas[0] == 'r'  and velas[2] == 'g' and cores.count('d') == 0: dir = 'put'
                         
 
                      
