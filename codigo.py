@@ -606,10 +606,10 @@ def run_script(email, password, account, par, entry_value, gales, stop_loss, sto
                                         valor_entrada = Martingale(valor_entrada, payout)
                                         stop(lucro, stop_gain, stop_loss)
                                         
-                                        if valor > 0 and checkbox_var.get():
-                                            soros = lucro
-                                            valor_entrada_b = soros  # Aumenta o valor da entrada para o próximo martingale
-                                            display_message(soros)
+                                        #if valor > 0 and checkbox_var.get():
+                                            #soros = lucro
+                                            #valor_entrada_b = soros  # Aumenta o valor da entrada para o próximo martingale
+                                            #display_message(soros)
                                         
                                             
                                         saldo_atual = API.get_balance()
@@ -713,7 +713,7 @@ start_button = tk.Button(root, text="Iniciar", command=iniciar_script)
 start_button.grid(row=8, column=1, sticky="w")
 
 # Adicionando o Checkbutton para ativar/desativar a opção
-tk.Checkbutton(root, text="Ativar Soros", variable=checkbox_var).grid(row=8, column=0, sticky="w")
+#tk.Checkbutton(root, text="Ativar Soros", variable=checkbox_var).grid(row=8, column=0, sticky="w")
 
 
 def on_closing():
